@@ -49,4 +49,9 @@ public class Scale(CalibrationData calibration)
     {
         BruteWeight = (RawValue - ZeroConstant) * FactorCal;
     }
+
+    public string PrintData()
+    {
+        return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {BruteWeight}\n NetWeight: {NetWeight}\n TareWeight: {TareWeight}\n ";
+    }
 }
