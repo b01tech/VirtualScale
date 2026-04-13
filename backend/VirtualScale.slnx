@@ -1,0 +1,9 @@
+<Solution>
+	<Folder Name="/src/">
+		<Project Path="src/VirtualScale.Domain/VirtualScale.Domain.csproj" />
+		<Project Path="src/VirtualScale.Worker/VirtualScale.Worker.csproj" />
+	</Folder>
+	<Folder Name="/test/">
+		<Project Path="test/VirtualScale.Domain.Test/VirtualScale.Domain.Test.csproj" />
+	</Folder>
+</Solution>

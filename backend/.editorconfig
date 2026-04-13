@@ -1,0 +1,18 @@
+root = true
+
+# BASE
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C#
+[*.{cs,csx}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+csharp_style_namespace_declarations = file_scoped: true
+
+[*.{sln,slnx}]
+indent_style = tab
