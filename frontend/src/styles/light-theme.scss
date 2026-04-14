@@ -1,0 +1,29 @@
+@use "./colors" as *;
+
+:root {
+  --action-primary: #{$primary-500};
+  --action-primary-hover: #{$primary-600};
+  --action-primary-active: #{$primary-700};
+  --action-primary-disabled: #{$primary-500};
+
+  --action-secondary: #{$secondary-500};
+  --action-secondary-hover: #{$secondary-600};
+  --action-secondary-active: #{$secondary-700};
+  --action-secondary-disabled: #{$secondary-100};
+
+  --action-tertiary: #{$tertiary-100};
+
+  --feedback-success: #{$success};
+  --feedback-info: #{$info};
+  --feedback-warning: #{$warning};
+  --feedback-error: #{$error};
+
+  --surface-background: #{$neutral-100};
+  --surface-foreground: #{$neutral-300};
+  --surface-border: #{$neutral-500};
+
+  --text-primary: #{$neutral-900};
+  --text-secondary: #{$neutral-700};
+  --text-muted: #{$neutral-300};
+  --text-disabled: #{$neutral-100};
+}

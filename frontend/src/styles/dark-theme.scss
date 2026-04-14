@@ -1,0 +1,29 @@
+@use "./colors" as *;
+
+.dark {
+  --action-primary: #{$primary-500};
+  --action-primary-hover: #{$primary-600};
+  --action-primary-active: #{$primary-700};
+  --action-primary-disabled: #{$primary-900};
+
+  --action-secondary: #{$secondary-500};
+  --action-secondary-hover: #{$secondary-600};
+  --action-secondary-active: #{$secondary-700};
+  --action-secondary-disabled: #{$secondary-900};
+
+  --action-tertiary: #{$tertiary-900};
+
+  --feedback-success: #{$success};
+  --feedback-info: #{$info};
+  --feedback-warning: #{$warning};
+  --feedback-error: #{$error};
+
+  --surface-background: #{$neutral-900};
+  --surface-foreground: #{$neutral-500};
+  --surface-border: #{$neutral-700};
+
+  --text-primary: #{$neutral-100};
+  --text-secondary: #{$neutral-300};
+  --text-muted: #{$neutral-500};
+  --text-disabled: #{$neutral-900};
+}
