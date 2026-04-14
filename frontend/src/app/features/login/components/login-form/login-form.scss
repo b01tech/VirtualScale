@@ -1,0 +1,74 @@
+:host {
+  width: 100%;
+  max-width: 380px;
+  display: block;
+  padding: 24px;
+  border-radius: 12px;
+  background-color: var(--surface-foreground);
+  border: 1px solid var(--surface-border);
+}
+
+h2 {
+  margin: 0 0 16px;
+  color: var(--text-primary);
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+input {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--action-secondary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--action-secondary) 25%, transparent);
+}
+
+.submit {
+  margin-top: 4px;
+  height: 42px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  background-color: var(--action-primary);
+}
+
+.submit:hover:not(:disabled) {
+  background-color: var(--action-primary-hover);
+}
+
+.submit:active:not(:disabled) {
+  background-color: var(--action-primary-active);
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  background-color: var(--action-primary-disabled);
+  opacity: 0.7;
+}
