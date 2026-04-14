@@ -11,7 +11,7 @@ import { Component } from "@angular/core";
       align-items: center;
       justify-content: center;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-      padding: 16px;
+      padding: 24px;
     }
 
     h1 {
