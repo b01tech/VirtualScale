@@ -3,6 +3,7 @@ namespace VirtualScale.Domain.Entities;
 public class Scale(CalibrationData calibration)
 {
     public List<LoadCell> LoadCells { get; init; } = new();
+    public int NumberOfCells { get; private set; } = 4;
     public decimal RawValue { get; private set; }
     public decimal FactorCal { get; private set; } = 1.0m;
     public decimal ZeroConstant { get; private set; } = 0.0m;
@@ -30,7 +31,10 @@ public class Scale(CalibrationData calibration)
 
     public bool CheckZero() => NetWeight == 0.0m;
 
-    private void SetRawValue() => RawValue = LoadCells.Average(cell => cell.GetValue());
+    private void SetRawValue()
+    {
+        RawValue = LoadCells.Count == 0 ? 0.0m : LoadCells.Average(cell => cell.GetValue());
+    }
 
     public void CalibrateZero()
     {
@@ -47,11 +51,24 @@ public class Scale(CalibrationData calibration)
 
     public void CalcWeight()
     {
+        SetRawValue();
         BruteWeight = (RawValue - ZeroConstant) * FactorCal;
+    }
+
+    public void UpdateLoadCell(int id, decimal value)
+    {
+        var loadCell = LoadCells.FirstOrDefault(c => c.Id == id);
+
+        if (loadCell == null)
+            return;
+
+        loadCell.SetRawValue(value);
     }
 
     public string PrintData()
     {
         return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {BruteWeight}\n NetWeight: {NetWeight}\n TareWeight: {TareWeight}\n ";
     }
+
+    public void SetNumberOfCells(int numberOfCells) => NumberOfCells = numberOfCells;
 }

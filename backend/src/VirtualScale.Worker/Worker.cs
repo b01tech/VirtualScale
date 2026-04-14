@@ -1,19 +1,28 @@
 using VirtualScale.Domain.Entities;
+using VirtualScale.Worker.Services;
 
 namespace VirtualScale.Worker;
 
-public class Worker(ILogger<Worker> logger, Scale scale) : BackgroundService
+public class Worker(ILogger<Worker> logger, Scale scale, SerialHandler serialHandler) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        serialHandler.StartReading();
+        try
         {
-            if (logger.IsEnabled(LogLevel.Information))
+            while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInformation(scale.PrintData());
-                logger.LogInformation("-----------------");
+                scale.CalcWeight();
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation(scale.PrintData());
+                }
+                await Task.Delay(200, stoppingToken);
             }
-            await Task.Delay(1000, stoppingToken);
+        }
+        finally
+        {
+            serialHandler.StopReading();
         }
     }
 }
