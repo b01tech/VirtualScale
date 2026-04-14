@@ -1,0 +1,17 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+span {
+  display: block;
+  height: 14px;
+  width: 14px;
+  background-color: var(--feedback-error);
+  border-radius: 50%;
+
+  &.tared {
+    background-color: var(--feedback-success);
+  }
+}

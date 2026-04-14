@@ -22,5 +22,5 @@ import { Component } from "@angular/core";
   `,
 })
 export class Header {
-  readonly title = "VirtualScale";
+  readonly title = "Balança";
 }

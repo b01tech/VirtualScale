@@ -1,3 +1,8 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
 button {
   padding: 10px 20px;
   border: none;
@@ -12,5 +17,15 @@ button {
   }
   &:active {
     background-color: var(--action-primary-active);
+  }
+}
+
+.cal {
+  background-color: var(--action-secondary);
+  &:hover {
+    background-color: var(--action-secondary-hover);
+  }
+  &:active {
+    background-color: var(--action-secondary-active);
   }
 }
