@@ -1,0 +1,16 @@
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--action-primary);
+  color: #fff;
+  font-size: 16px;
+
+  &:hover {
+    background-color: var(--action-primary-hover);
+  }
+  &:active {
+    background-color: var(--action-primary-active);
+  }
+}
