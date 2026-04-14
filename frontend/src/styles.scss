@@ -12,6 +12,6 @@ body {
   width: 100%;
   background-color: var(--surface-background);
   color: var(--text-primary);
-  font-family: $font-body;
+  font-family: var(--font-body);
   font-size: 16px;
 }

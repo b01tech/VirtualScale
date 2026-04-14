@@ -1,2 +1,7 @@
 $font-title: "Noto Serif", serif;
 $font-body: "Noto Sans", sans-serif;
+
+:root {
+  --font-title: #{$font-title};
+  --font-body: #{$font-body};
+}
