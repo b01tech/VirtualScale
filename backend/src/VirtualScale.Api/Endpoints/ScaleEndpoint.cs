@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VirtualScale.Api.Dtos;
 using VirtualScale.Domain.Entities;
 
 namespace VirtualScale.Api.Endpoints;
@@ -8,6 +9,19 @@ public static class ScaleEndpoint
     public static void MapScaleEndpoint(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/scale").WithTags("Scale");
+
+        group
+            .MapGet(
+                "/",
+                ([FromServices] Scale scale) =>
+                {
+                    var (bruteWeight, netWeight, tareWeight) = scale.GetRoundedWeights();
+                    return new ScaleResponse(bruteWeight, netWeight, tareWeight, scale.IsTared);
+                }
+            )
+            .WithName("Read Scale")
+            .WithSummary("Read the current scale values")
+            .Produces<ScaleResponse>(StatusCodes.Status200OK);
 
         group
             .MapPost(

@@ -65,6 +65,11 @@ public class Scale(CalibrationData calibration)
         loadCell.SetRawValue(value);
     }
 
+    public (decimal bruteWeight, decimal netWeight, decimal tareWeight) GetRoundedWeights()
+    {
+        return (RoundValue(BruteWeight), RoundValue(NetWeight), RoundValue(TareWeight));
+    }
+
     public string PrintData()
     {
         var bruteWeight = RoundValue(BruteWeight);
