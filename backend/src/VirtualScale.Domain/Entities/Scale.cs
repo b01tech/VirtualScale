@@ -3,14 +3,14 @@ namespace VirtualScale.Domain.Entities;
 public class Scale(CalibrationData calibration)
 {
     public List<LoadCell> LoadCells { get; init; } = new();
-    public int NumberOfCells { get; private set; } = 4;
+    public int NumberOfCells { get; private set; } = 1;
     public decimal RawValue { get; private set; }
     public decimal FactorCal { get; private set; } = 1.0m;
     public decimal ZeroConstant { get; private set; } = 0.0m;
     public decimal SpanConstant { get; private set; } = 0.0m;
 
     public decimal BruteWeight { get; private set; }
-    public decimal TareWeight { get; private set; }
+    public decimal TareWeight { get; private set; } = 0.0m;
     public decimal NetWeight => BruteWeight - TareWeight;
 
     public bool IsTared { get; private set; } = false;
@@ -52,7 +52,7 @@ public class Scale(CalibrationData calibration)
     public void CalcWeight()
     {
         SetRawValue();
-        BruteWeight = (RawValue - ZeroConstant) * FactorCal;
+        BruteWeight = (RawValue - ZeroConstant) / FactorCal;
     }
 
     public void UpdateLoadCell(int id, decimal value)
@@ -67,8 +67,15 @@ public class Scale(CalibrationData calibration)
 
     public string PrintData()
     {
-        return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {BruteWeight}\n NetWeight: {NetWeight}\n TareWeight: {TareWeight}\n ";
+        var bruteWeight = RoundValue(BruteWeight);
+        var netWeight = RoundValue(NetWeight);
+        var tareWeight = RoundValue(TareWeight);
+
+        return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {bruteWeight}\n NetWeight: {netWeight}\n TareWeight: {tareWeight}\n ";
     }
 
     public void SetNumberOfCells(int numberOfCells) => NumberOfCells = numberOfCells;
+
+    private decimal RoundValue(decimal value) =>
+        Math.Round(value / (decimal)calibration.Resolution) * (decimal)calibration.Resolution;
 }

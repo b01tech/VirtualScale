@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using VirtualScale.Domain.Entities;
 using VirtualScale.Worker.Services;
 

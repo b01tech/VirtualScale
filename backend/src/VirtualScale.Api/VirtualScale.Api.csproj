@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VirtualScale.Domain\VirtualScale.Domain.csproj" />
+    <ProjectReference Include="..\VirtualScale.Worker\VirtualScale.Worker.csproj" />
   </ItemGroup>
 
 </Project>
