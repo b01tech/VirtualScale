@@ -1,5 +1,6 @@
 <Solution>
 	<Folder Name="/src/">
+		<Project Path="src/VirtualScale.Api/VirtualScale.Api.csproj" />
 		<Project Path="src/VirtualScale.Domain/VirtualScale.Domain.csproj" />
 		<Project Path="src/VirtualScale.Worker/VirtualScale.Worker.csproj" />
 	</Folder>
