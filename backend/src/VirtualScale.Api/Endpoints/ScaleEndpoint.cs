@@ -16,12 +16,32 @@ public static class ScaleEndpoint
                 ([FromServices] Scale scale) =>
                 {
                     var (bruteWeight, netWeight, tareWeight) = scale.GetRoundedWeights();
-                    return new ScaleResponse(bruteWeight, netWeight, tareWeight, scale.IsTared);
+                    return new ScaleResponse(
+                        bruteWeight,
+                        netWeight,
+                        tareWeight,
+                        scale.IsTared,
+                        scale.IsStable,
+                        scale.FilterLevel
+                    );
                 }
             )
             .WithName("Read Scale")
             .WithSummary("Read the current scale values")
             .Produces<ScaleResponse>(StatusCodes.Status200OK);
+
+        group
+            .MapPost(
+                "/filter",
+                ([FromServices] Scale scale, [FromBody] FilterLevelRequest request) =>
+                {
+                    scale.SetFilterLevel(request.Level);
+                    return Results.Ok(new { status = "success" });
+                }
+            )
+            .WithName("Set Filter Level")
+            .WithSummary("Set digital filter level (0 disables)")
+            .Produces(StatusCodes.Status200OK);
 
         group
             .MapPost(

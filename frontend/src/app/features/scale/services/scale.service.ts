@@ -25,6 +25,8 @@ export class ScaleService {
     netWeight: 0,
     tareWeight: 0,
     isTared: false,
+    isStable: false,
+    filterLevel: 0,
   });
 
   readonly loadCells = signal<LoadCellResponse[]>([]);
@@ -115,6 +117,10 @@ export class ScaleService {
 
   calibrateSpan() {
     return this._httpClient.post<void>(this._apiUrl + "/calibrate/span", {});
+  }
+
+  setFilterLevel(level: number) {
+    return this._httpClient.post<void>(this._apiUrl + "/filter", { level });
   }
 
   setLoadCellFactor(id: number, factor: number) {

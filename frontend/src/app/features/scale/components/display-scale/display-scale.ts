@@ -5,10 +5,11 @@ import { DecimalPipe } from "@angular/common";
 import { TareIndicator } from "../tare-indicator/tare-indicator";
 import { LoadCellGrid } from "../loadcell-grid/loadcell-grid";
 import { SerialService } from "../../services/serial.service";
+import { StableIndicator } from "../stable-indicator/stable-indicator";
 
 @Component({
   selector: "app-display-scale",
-  imports: [DecimalPipe, TareIndicator, LoadCellGrid],
+  imports: [DecimalPipe, TareIndicator, LoadCellGrid, StableIndicator],
   templateUrl: "./display-scale.html",
   styleUrl: "./display-scale.scss",
 })

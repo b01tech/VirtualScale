@@ -5,6 +5,7 @@ public class Scale(CalibrationData calibration)
     public List<LoadCell> LoadCells { get; init; } = new();
     public int NumberOfCells { get; private set; } = 1;
     public decimal RawValue { get; private set; }
+    public int FilterLevel { get; private set; } = 0;
     public decimal FactorCal { get; private set; } = 1000.0m;
     public decimal ZeroConstant { get; private set; } = 0.0m;
     public decimal SpanConstant { get; private set; } = 0.0m;
@@ -16,6 +17,10 @@ public class Scale(CalibrationData calibration)
     public bool IsTared { get; private set; } = false;
     public bool IsOnZero => CheckZero();
     public bool IsStable { get; private set; } = true;
+
+    private decimal? FilteredRawValue { get; set; }
+    private decimal? LastBruteWeight { get; set; }
+    private int StableCounter { get; set; }
 
     public void Tare()
     {
@@ -33,7 +38,42 @@ public class Scale(CalibrationData calibration)
 
     private void SetRawValue()
     {
-        RawValue = LoadCells.Count == 0 ? 0.0m : LoadCells.Average(cell => cell.GetValue());
+        var raw = LoadCells.Count == 0 ? 0.0m : LoadCells.Average(cell => cell.GetValue());
+        RawValue = ApplyFilter(raw);
+    }
+
+    public void SetFilterLevel(int level)
+    {
+        FilterLevel = Math.Clamp(level, 0, 10);
+        FilteredRawValue = null;
+        StableCounter = 0;
+        IsStable = false;
+    }
+
+    private decimal ApplyFilter(decimal raw)
+    {
+        if (FilterLevel <= 0)
+        {
+            FilteredRawValue = raw;
+            return raw;
+        }
+
+        var alpha = GetFilterAlpha(FilterLevel);
+        FilteredRawValue = FilteredRawValue is null ? raw : FilteredRawValue.Value + alpha * (raw - FilteredRawValue.Value);
+        return FilteredRawValue.Value;
+    }
+
+    private static decimal GetFilterAlpha(int level)
+    {
+        return level switch
+        {
+            1 => 0.50m,
+            2 => 0.30m,
+            3 => 0.20m,
+            4 => 0.10m,
+            5 => 0.05m,
+            _ => 1.0m / (level * 5.0m + 1.0m)
+        };
     }
 
     public void CalibrateZero()
@@ -53,6 +93,34 @@ public class Scale(CalibrationData calibration)
     {
         SetRawValue();
         BruteWeight = (RawValue - ZeroConstant) / FactorCal;
+        UpdateStability();
+    }
+
+    private void UpdateStability()
+    {
+        var tolerance = Math.Max((decimal)calibration.Resolution, 0.000001m);
+        var requiredSamples = 5;
+
+        if (LastBruteWeight is null)
+        {
+            LastBruteWeight = BruteWeight;
+            StableCounter = 0;
+            IsStable = false;
+            return;
+        }
+
+        var delta = Math.Abs(BruteWeight - LastBruteWeight.Value);
+        if (delta <= tolerance)
+        {
+            StableCounter++;
+        }
+        else
+        {
+            StableCounter = 0;
+        }
+
+        LastBruteWeight = BruteWeight;
+        IsStable = StableCounter >= requiredSamples;
     }
 
     public void UpdateLoadCell(int id, decimal value)

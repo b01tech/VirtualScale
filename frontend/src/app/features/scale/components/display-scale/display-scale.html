@@ -18,6 +18,10 @@
       TARA:
       <app-tare-indicator [isTared]="scale().isTared"></app-tare-indicator>
     </div>
+    <div class="tara-status">
+      ESTÁVEL:
+      <app-stable-indicator [isStable]="scale().isStable"></app-stable-indicator>
+    </div>
   </div>
 
   <app-loadcell-grid [cells]="loadCells()"></app-loadcell-grid>

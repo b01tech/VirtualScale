@@ -1,0 +1,29 @@
+<section class="filter">
+  <div class="header">
+    <div class="title">Filtro</div>
+    <div class="subtitle">Nível de filtro digital</div>
+  </div>
+
+  <div class="controls">
+    <label class="label" for="filterLevel">Nível</label>
+    <select
+      id="filterLevel"
+      class="select"
+      [value]="selected()"
+      (change)="onLevelChange($event)"
+      [disabled]="!isConnected() || isBusy()"
+    >
+      @for (level of [0, 1, 2, 3, 4, 5]; track level) {
+        <option [value]="level">{{ level === 0 ? "0 (off)" : level }}</option>
+      }
+    </select>
+
+    <app-button
+      [label]="'Aplicar'"
+      [variant]="'secondary'"
+      [disabled]="!isConnected() || isBusy()"
+      (clicked)="apply()"
+    ></app-button>
+  </div>
+</section>
+

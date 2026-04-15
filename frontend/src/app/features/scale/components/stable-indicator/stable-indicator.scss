@@ -1,0 +1,12 @@
+.dot {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background-color: var(--feedback-warning);
+}
+
+.dot.stable {
+  background-color: var(--feedback-success);
+}
+
