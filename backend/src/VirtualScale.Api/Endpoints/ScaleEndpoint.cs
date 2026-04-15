@@ -91,8 +91,8 @@ public static class ScaleEndpoint
                 "/tare",
                 ([FromServices] Scale scale) =>
                 {
-                    scale.Tare();
-                    return new { status = "success" };
+                    var applied = scale.Tare();
+                    return new { status = applied ? "success" : "ignored", applied };
                 }
             )
             .WithName("Tare Scale")

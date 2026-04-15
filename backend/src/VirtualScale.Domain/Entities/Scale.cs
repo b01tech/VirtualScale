@@ -24,16 +24,23 @@ public class Scale(CalibrationData calibration)
     private decimal? LastBruteWeight { get; set; }
     private int StableCounter { get; set; }
 
-    public void Tare()
+    public bool Tare()
     {
         if (IsTared)
         {
             TareWeight = 0.0m;
             IsTared = false;
-            return;
+            return true;
         }
+
+        if (BruteWeight <= 0.0m)
+        {
+            return false;
+        }
+
         TareWeight = BruteWeight;
         IsTared = true;
+        return true;
     }
 
     public bool CheckZero() => NetWeight == 0.0m;

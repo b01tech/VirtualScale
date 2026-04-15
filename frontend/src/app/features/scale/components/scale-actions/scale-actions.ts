@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { AppButton } from "../../../../shared/button/app-button";
@@ -16,6 +16,10 @@ export class ScaleActions {
   private readonly _scaleService = inject(ScaleService);
   private readonly _router = inject(Router);
   protected readonly isBusy = signal(false);
+  protected readonly scale = this._scaleService.latest;
+  protected readonly canTare = computed(
+    () => this.scale().isTared || this.scale().bruteWeight > 0,
+  );
 
   protected async tare() {
     if (this.isBusy()) {
