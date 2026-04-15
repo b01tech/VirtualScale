@@ -1,0 +1,9 @@
+<button
+  class="btn"
+  type="button"
+  [class.secondary]="variant() === 'secondary'"
+  [disabled]="disabled()"
+  (click)="clicked.emit()"
+>
+  {{ label() }}
+</button>

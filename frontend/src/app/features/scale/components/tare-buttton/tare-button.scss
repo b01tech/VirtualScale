@@ -1,48 +1,34 @@
 :host {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-}
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: var(--action-primary);
-  color: #fff;
-  font-size: 16px;
-
-  &:hover {
-    background-color: var(--action-primary-hover);
-  }
-  &:active {
-    background-color: var(--action-primary-active);
-  }
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
 }
 
-.cal {
-  background-color: var(--action-secondary);
-  &:hover {
-    background-color: var(--action-secondary-hover);
-  }
-  &:active {
-    background-color: var(--action-secondary-active);
-  }
+.actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
+
 .calibration {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
 }
 
 h3 {
   display: block;
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin: 8px 0 0;
   border-top: 1px solid var(--action-secondary);
-  padding-top: 20px;
+  padding-top: 12px;
+  width: 100%;
+  text-align: center;
 }

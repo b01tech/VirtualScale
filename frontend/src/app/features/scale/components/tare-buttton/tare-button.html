@@ -1,6 +1,23 @@
-<button (click)="onClick()">Tarar</button>
+<div class="actions">
+  <app-button
+    [label]="'Tarar'"
+    [disabled]="isBusy()"
+    (clicked)="onTare()"
+  ></app-button>
+</div>
+
 <h3>Calibração</h3>
 <div class="calibration">
-  <button class="cal" (click)="onClick()">Zero</button>
-  <button class="cal" (click)="onClick()">Span</button>
+  <app-button
+    [label]="'Zero'"
+    [variant]="'secondary'"
+    [disabled]="isBusy()"
+    (clicked)="onCalibrateZero()"
+  ></app-button>
+  <app-button
+    [label]="'Span'"
+    [variant]="'secondary'"
+    [disabled]="isBusy()"
+    (clicked)="onCalibrateSpan()"
+  ></app-button>
 </div>

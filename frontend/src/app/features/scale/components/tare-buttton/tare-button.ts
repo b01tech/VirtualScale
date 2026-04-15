@@ -1,14 +1,51 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 import { ScaleService } from "../../services/scale.service";
+import { AppButton } from "../../../../shared/button/app-button";
 
 @Component({
   selector: "app-tare-button",
+  imports: [AppButton],
   templateUrl: "./tare-button.html",
   styleUrl: "./tare-button.scss",
 })
 export class TareButton {
   private readonly _scaleService = inject(ScaleService);
-  onClick() {
-    this._scaleService.tareScale().subscribe();
+  protected readonly isBusy = signal(false);
+
+  async onTare() {
+    if (this.isBusy()) {
+      return;
+    }
+    this.isBusy.set(true);
+    try {
+      await firstValueFrom(this._scaleService.tareScale());
+    } finally {
+      this.isBusy.set(false);
+    }
+  }
+
+  async onCalibrateZero() {
+    if (this.isBusy()) {
+      return;
+    }
+    this.isBusy.set(true);
+    try {
+      await firstValueFrom(this._scaleService.calibrateZero());
+    } finally {
+      this.isBusy.set(false);
+    }
+  }
+
+  async onCalibrateSpan() {
+    if (this.isBusy()) {
+      return;
+    }
+    this.isBusy.set(true);
+    try {
+      await firstValueFrom(this._scaleService.calibrateSpan());
+    } finally {
+      this.isBusy.set(false);
+    }
   }
 }

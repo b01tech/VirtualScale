@@ -1,0 +1,37 @@
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--action-primary);
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--action-primary-hover);
+}
+
+.btn:active:not(:disabled) {
+  background-color: var(--action-primary-active);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  background-color: var(--action-primary-disabled);
+  opacity: 0.7;
+}
+
+.btn.secondary {
+  background-color: var(--action-secondary);
+}
+
+.btn.secondary:hover:not(:disabled) {
+  background-color: var(--action-secondary-hover);
+}
+
+.btn.secondary:active:not(:disabled) {
+  background-color: var(--action-secondary-active);
+}
+
