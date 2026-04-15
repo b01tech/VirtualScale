@@ -15,6 +15,7 @@ export class ScaleService {
   private readonly _apiUrl = environment.apiBaseUrl + "/api/scale";
   private readonly _hubUrl = environment.apiBaseUrl + "/hubs/scale";
   private readonly _loadCellHubUrl = environment.apiBaseUrl + "/hubs/loadcells";
+  private readonly _loadCellApiUrl = environment.apiBaseUrl + "/api/loadcells";
   private readonly _httpClient = inject(HttpClient);
   private _connection: HubConnection | null = null;
   private _loadCellConnection: HubConnection | null = null;
@@ -114,6 +115,20 @@ export class ScaleService {
 
   calibrateSpan() {
     return this._httpClient.post<void>(this._apiUrl + "/calibrate/span", {});
+  }
+
+  setLoadCellFactor(id: number, factor: number) {
+    return this._httpClient.post<void>(this._loadCellApiUrl + "/factor", {
+      id,
+      factor,
+    });
+  }
+
+  resetLoadCellFactors() {
+    return this._httpClient.post<void>(
+      this._loadCellApiUrl + "/factors/reset",
+      {},
+    );
   }
 
   private upsertLoadCell(value: LoadCellResponse) {

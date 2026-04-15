@@ -2,10 +2,11 @@ import { Component, inject, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ScaleService } from "../../services/scale.service";
 import { AppButton } from "../../../../shared/button/app-button";
+import { EqualizeLoadCells } from "../equalize-loadcells/equalize-loadcells";
 
 @Component({
   selector: "app-tare-button",
-  imports: [AppButton],
+  imports: [AppButton, EqualizeLoadCells],
   templateUrl: "./tare-button.html",
   styleUrl: "./tare-button.scss",
 })

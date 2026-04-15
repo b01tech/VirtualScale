@@ -25,5 +25,18 @@ public static class LoadCellEndpoint
             .WithSummary("Set correction factor for a load cell by id")
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
+
+        group
+            .MapPost(
+                "/factors/reset",
+                ([FromServices] Scale scale) =>
+                {
+                    scale.ResetLoadCellFactors();
+                    return Results.Ok(new { status = "success" });
+                }
+            )
+            .WithName("Reset LoadCell Factors")
+            .WithSummary("Reset correction factor of all load cells to 1.0")
+            .Produces(StatusCodes.Status200OK);
     }
 }

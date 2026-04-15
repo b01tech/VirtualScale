@@ -3,9 +3,9 @@ namespace VirtualScale.Domain.Entities;
 public class Scale(CalibrationData calibration)
 {
     public List<LoadCell> LoadCells { get; init; } = new();
-    public int NumberOfCells { get; private set; } = 4;
+    public int NumberOfCells { get; private set; } = 1;
     public decimal RawValue { get; private set; }
-    public decimal FactorCal { get; private set; } = 1.0m;
+    public decimal FactorCal { get; private set; } = 1000.0m;
     public decimal ZeroConstant { get; private set; } = 0.0m;
     public decimal SpanConstant { get; private set; } = 0.0m;
 
@@ -74,11 +74,20 @@ public class Scale(CalibrationData calibration)
 
         if (loadCell == null)
         {
-            return false;
+            loadCell = new LoadCell(id);
+            LoadCells.Add(loadCell);
         }
 
         loadCell.SetFactor(factor);
         return true;
+    }
+
+    public void ResetLoadCellFactors()
+    {
+        foreach (var loadCell in LoadCells)
+        {
+            loadCell.SetFactor(1.0m);
+        }
     }
 
     public (decimal bruteWeight, decimal netWeight, decimal tareWeight) GetRoundedWeights()

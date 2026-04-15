@@ -1,0 +1,113 @@
+<div class="equalize">
+  <div class="top-actions">
+    <app-button
+      [label]="'Equalizar'"
+      [variant]="'secondary'"
+      [disabled]="!isConnected() || totalSteps() < 2"
+      (clicked)="start()"
+    ></app-button>
+    <app-button
+      [label]="'Reset fatores'"
+      [variant]="'secondary'"
+      [disabled]="!isConnected() || !hasCells()"
+      (clicked)="openReset()"
+    ></app-button>
+  </div>
+
+  @if (error()) {
+  <div class="error">{{ error() }}</div>
+  } @if (isResetOpen()) {
+  <div class="panel">
+    <div class="title">Resetar fatores</div>
+    <div class="subtitle">
+      Isso define o fator de todas as células para 1.0.
+    </div>
+
+    <div class="actions">
+      <app-button
+        [label]="'Cancelar'"
+        [variant]="'secondary'"
+        [disabled]="isBusy()"
+        (clicked)="close()"
+      ></app-button>
+      <app-button
+        [label]="'Confirmar'"
+        [disabled]="isBusy()"
+        (clicked)="confirmReset()"
+      ></app-button>
+    </div>
+  </div>
+  } @else if (isOpen()) {
+  <div class="panel">
+    @if (isDone()) {
+    <div class="title">Equalização concluída</div>
+    <div class="subtitle">Fatores aplicados</div>
+
+    <div class="applied">
+      @for (id of orderedIds(); track id) { @if (applied()[id]) {
+      <div class="applied-line">
+        <span>#{{ id }}</span>
+        <span>{{ applied()[id] | number: "1.0-6" }}</span>
+      </div>
+      } }
+    </div>
+
+    <div class="actions">
+      <app-button [label]="'Fechar'" (clicked)="close()"></app-button>
+    </div>
+    } @else {
+    <div class="title">Equalizar células</div>
+    <div class="subtitle">
+      Use o mesmo peso em todas as plataformas e confirme uma por vez.
+    </div>
+
+    <div class="step">
+      <div class="step-title">
+        Plataforma {{ stepIndex() + 1 }} / {{ totalSteps() }} (Célula #{{
+        currentId() }})
+      </div>
+      <div class="step-text">
+        @if (stepIndex() === 0) { Coloque o peso na plataforma 1 e pressione
+        Confirmar para definir a referência. } @else { Coloque o peso na
+        plataforma {{ stepIndex() + 1 }} e pressione Confirmar para ajustar o
+        fator. }
+      </div>
+
+      @if (currentCell()) {
+      <div class="live">
+        <div class="live-line">
+          <span>Raw</span>
+          <span>{{ currentCell()!.rawValue | number: "1.0-3" }}</span>
+        </div>
+        <div class="live-line">
+          <span>Factor</span>
+          <span>{{ currentCell()!.factor | number: "1.0-6" }}</span>
+        </div>
+        <div class="live-line">
+          <span>Value</span>
+          <span
+            >{{ currentCell()!.rawValue * currentCell()!.factor | number:
+            "1.0-3" }}</span
+          >
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="actions">
+      <app-button
+        [label]="'Cancelar'"
+        [variant]="'secondary'"
+        [disabled]="isBusy()"
+        (clicked)="close()"
+      ></app-button>
+      <app-button
+        [label]="'Confirmar'"
+        [disabled]="isBusy() || !currentCell()"
+        (clicked)="confirm()"
+      ></app-button>
+    </div>
+    }
+  </div>
+  }
+</div>
