@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ScaleResponse } from "../models/scale-response";
+import { LoadCellResponse } from "../models/loadcell-response";
 import { environment } from "../../../../environment/environment";
 import { HttpClient } from "@angular/common/http";
 import {
@@ -13,8 +14,10 @@ import {
 export class ScaleService {
   private readonly _apiUrl = environment.apiBaseUrl + "/api/scale";
   private readonly _hubUrl = environment.apiBaseUrl + "/hubs/scale";
+  private readonly _loadCellHubUrl = environment.apiBaseUrl + "/hubs/loadcells";
   private readonly _httpClient = inject(HttpClient);
   private _connection: HubConnection | null = null;
+  private _loadCellConnection: HubConnection | null = null;
 
   readonly latest = signal<ScaleResponse>({
     bruteWeight: 0,
@@ -22,6 +25,8 @@ export class ScaleService {
     tareWeight: 0,
     isTared: false,
   });
+
+  readonly loadCells = signal<LoadCellResponse[]>([]);
 
   async startLive(): Promise<void> {
     if (this._connection?.state === HubConnectionState.Connected) {
@@ -59,6 +64,42 @@ export class ScaleService {
     }
   }
 
+  async startLoadCellsLive(): Promise<void> {
+    if (this._loadCellConnection?.state === HubConnectionState.Connected) {
+      return;
+    }
+
+    const connection =
+      this._loadCellConnection ??
+      new HubConnectionBuilder()
+        .withUrl(this._loadCellHubUrl, {
+          transport: HttpTransportType.WebSockets,
+          withCredentials: false,
+        })
+        .withAutomaticReconnect()
+        .build();
+
+    this._loadCellConnection = connection;
+    await connection.start();
+
+    const stream = connection.stream<LoadCellResponse>("Stream", null);
+    stream.subscribe({
+      next: (value) => this.upsertLoadCell(value),
+      error: () => {},
+      complete: () => {},
+    });
+  }
+
+  async stopLoadCellsLive(): Promise<void> {
+    if (!this._loadCellConnection) {
+      return;
+    }
+
+    if (this._loadCellConnection.state !== HubConnectionState.Disconnected) {
+      await this._loadCellConnection.stop();
+    }
+  }
+
   getSnapshot() {
     return this._httpClient.get<ScaleResponse>(this._apiUrl + "/");
   }
@@ -66,10 +107,26 @@ export class ScaleService {
   tareScale() {
     return this._httpClient.post<void>(this._apiUrl + "/tare", {});
   }
+
   calibrateZero() {
     return this._httpClient.post<void>(this._apiUrl + "/calibrate/zero", {});
   }
+
   calibrateSpan() {
     return this._httpClient.post<void>(this._apiUrl + "/calibrate/span", {});
+  }
+
+  private upsertLoadCell(value: LoadCellResponse) {
+    this.loadCells.update((cells: LoadCellResponse[]) => {
+      const next = [...cells];
+      const index = next.findIndex((cell) => cell.id === value.id);
+      if (index >= 0) {
+        next[index] = value;
+      } else {
+        next.push(value);
+      }
+      next.sort((a, b) => a.id - b.id);
+      return next;
+    });
   }
 }
