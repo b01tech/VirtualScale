@@ -10,7 +10,15 @@ public class ScaleHub(Scale scale) : Hub
     public ScaleResponse GetCurrent()
     {
         var (bruteWeight, netWeight, tareWeight) = scale.GetRoundedWeights();
-        return new ScaleResponse(bruteWeight, netWeight, tareWeight, scale.IsTared, scale.IsStable, scale.FilterLevel);
+        return new ScaleResponse(
+            bruteWeight,
+            netWeight,
+            tareWeight,
+            scale.IsTared,
+            scale.IsStable,
+            scale.FilterLevel,
+            scale.NumberOfCells
+        );
     }
 
     public async IAsyncEnumerable<ScaleResponse> Stream([EnumeratorCancellation] CancellationToken cancellationToken)

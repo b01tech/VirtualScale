@@ -63,14 +63,23 @@
 
     <div class="step">
       <div class="step-title">
-        Plataforma {{ stepIndex() + 1 }} / {{ totalSteps() }} (Célula #{{
-        currentId() }})
+        @if (stepIndex() === 0) {
+          Baseline (sem peso) — 1 / {{ totalSteps() }}
+        } @else if (stepIndex() === 1) {
+          Referência (plataforma 1) — 2 / {{ totalSteps() }} (Célula #{{ currentId() }})
+        } @else {
+          Plataforma {{ stepIndex() }} / {{ totalCells() }} — {{ stepIndex() + 1 }} /
+          {{ totalSteps() }} (Célula #{{ currentId() }})
+        }
       </div>
       <div class="step-text">
-        @if (stepIndex() === 0) { Coloque o peso na plataforma 1 e pressione
-        Confirmar para definir a referência. } @else { Coloque o peso na
-        plataforma {{ stepIndex() + 1 }} e pressione Confirmar para ajustar o
-        fator. }
+        @if (stepIndex() === 0) {
+          Remova todo peso de todas as plataformas e pressione Confirmar para registrar o baseline.
+        } @else if (stepIndex() === 1) {
+          Coloque o peso na plataforma 1 e pressione Confirmar para definir a referência.
+        } @else {
+          Coloque o mesmo peso na plataforma {{ stepIndex() }} e pressione Confirmar para ajustar o fator.
+        }
       </div>
 
       @if (currentCell()) {
@@ -78,6 +87,17 @@
         <div class="live-line">
           <span>Raw</span>
           <span>{{ currentCell()!.rawValue | number: "1.0-3" }}</span>
+        </div>
+        <div class="live-line">
+          <span>Baseline</span>
+          <span>{{ baseline()[currentCell()!.id] | number: "1.0-3" }}</span>
+        </div>
+        <div class="live-line">
+          <span>Delta</span>
+          <span
+            >{{ currentCell()!.rawValue - baseline()[currentCell()!.id] | number:
+            "1.0-3" }}</span
+          >
         </div>
         <div class="live-line">
           <span>Factor</span>
@@ -103,7 +123,7 @@
       ></app-button>
       <app-button
         [label]="'Confirmar'"
-        [disabled]="isBusy() || !currentCell()"
+        [disabled]="isBusy() || (!currentCell() && stepIndex() !== 0) || !isStable()"
         (clicked)="confirm()"
       ></app-button>
     </div>

@@ -21,25 +21,35 @@ export class EqualizeLoadCells {
   protected readonly stepIndex = signal(0);
   protected readonly isBusy = signal(false);
   protected readonly error = signal<string | null>(null);
-  protected readonly referenceScaled = signal<number | null>(null);
+  protected readonly baseline = signal<Record<number, number>>({});
+  protected readonly referenceDeltaScaled = signal<number | null>(null);
   protected readonly applied = signal<Record<number, number>>({});
 
   protected readonly serialStatus = this._serialService.status;
+  protected readonly scale = this._scaleService.latest;
   protected readonly loadCells = this._scaleService.loadCells;
 
   protected readonly isConnected = computed(
     () => this.serialStatus().state === 2,
   );
-  protected readonly hasCells = computed(() => this.loadCells().length > 0);
+  protected readonly isStable = computed(() => this.scale().isStable);
+  protected readonly visibleCells = computed(() => {
+    const max = Math.max(0, this.scale().numberOfCells ?? 0);
+    return [...this.loadCells()].sort((a, b) => a.id - b.id).slice(0, max);
+  });
+  protected readonly hasCells = computed(() => this.visibleCells().length > 0);
 
   protected readonly orderedIds = computed(() =>
-    [...this.loadCells()].map((c) => c.id).sort((a, b) => a - b),
+    this.visibleCells().map((c) => c.id),
   );
 
-  protected readonly totalSteps = computed(() => this.orderedIds().length);
+  protected readonly totalCells = computed(() => this.orderedIds().length);
+  protected readonly totalSteps = computed(() => this.totalCells() + 1);
 
-  protected readonly currentId = computed(
-    () => this.orderedIds()[this.stepIndex()] ?? null,
+  protected readonly currentId = computed(() =>
+    this.stepIndex() <= 0
+      ? null
+      : (this.orderedIds()[this.stepIndex() - 1] ?? null),
   );
 
   protected readonly currentCell = computed<LoadCellResponse | null>(() => {
@@ -47,18 +57,19 @@ export class EqualizeLoadCells {
     if (id === null) {
       return null;
     }
-    return this.loadCells().find((c) => c.id === id) ?? null;
+    return this.visibleCells().find((c) => c.id === id) ?? null;
   });
 
   protected readonly isDone = computed(
-    () => this.isOpen() && this.stepIndex() >= this.totalSteps(),
+    () => this.isOpen() && this.stepIndex() > this.totalCells(),
   );
 
   protected start() {
     this.error.set(null);
     this.isResetOpen.set(false);
     this.applied.set({});
-    this.referenceScaled.set(null);
+    this.baseline.set({});
+    this.referenceDeltaScaled.set(null);
     this.stepIndex.set(0);
 
     if (!this.isConnected()) {
@@ -66,7 +77,7 @@ export class EqualizeLoadCells {
       return;
     }
 
-    if (this.totalSteps() < 2) {
+    if (this.totalCells() < 2) {
       this.error.set("Necessário pelo menos 2 células para equalizar");
       return;
     }
@@ -119,35 +130,58 @@ export class EqualizeLoadCells {
       return;
     }
 
-    const cell = this.currentCell();
-    if (!cell) {
-      this.error.set("Célula não encontrada");
+    if (!this.isStable()) {
+      this.error.set("Aguardando estabilidade");
       return;
     }
 
     this.error.set(null);
 
     const currentStep = this.stepIndex();
-    const raw = cell.rawValue;
 
     if (currentStep === 0) {
-      this.referenceScaled.set(raw * cell.factor);
-      this.stepIndex.set(currentStep + 1);
+      const snapshot = this.visibleCells();
+      const baseline: Record<number, number> = {};
+      for (const cell of snapshot) {
+        baseline[cell.id] = cell.rawValue;
+      }
+      this.baseline.set(baseline);
+      this.stepIndex.set(1);
       return;
     }
 
-    const referenceScaled = this.referenceScaled();
-    if (referenceScaled === null) {
+    const cell = this.currentCell();
+    if (!cell) {
+      this.error.set("Célula não encontrada");
+      return;
+    }
+
+    const baseline = this.baseline();
+    const baselineRaw = baseline[cell.id];
+    if (baselineRaw === undefined) {
+      this.error.set("Baseline não definido");
+      return;
+    }
+
+    const deltaRaw = cell.rawValue - baselineRaw;
+    if (deltaRaw == 0) {
+      this.error.set("Delta = 0, impossível calcular fator");
+      return;
+    }
+
+    if (currentStep === 1) {
+      this.referenceDeltaScaled.set(deltaRaw * cell.factor);
+      this.stepIndex.set(2);
+      return;
+    }
+
+    const referenceDeltaScaled = this.referenceDeltaScaled();
+    if (referenceDeltaScaled === null) {
       this.error.set("Referência não definida");
       return;
     }
 
-    if (raw === 0) {
-      this.error.set("RawValue = 0, impossível calcular fator");
-      return;
-    }
-
-    const newFactor = referenceScaled / raw;
+    const newFactor = referenceDeltaScaled / deltaRaw;
 
     this.isBusy.set(true);
     try {

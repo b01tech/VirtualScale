@@ -22,7 +22,8 @@ public static class ScaleEndpoint
                         tareWeight,
                         scale.IsTared,
                         scale.IsStable,
-                        scale.FilterLevel
+                        scale.FilterLevel,
+                        scale.NumberOfCells
                     );
                 }
             )

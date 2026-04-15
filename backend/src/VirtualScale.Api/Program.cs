@@ -6,7 +6,7 @@ using VirtualScale.Worker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton(new CalibrationData(10, 2, 3, 10));
+builder.Services.AddSingleton(new CalibrationData(10, 1, 3, 10));
 builder.Services.AddSingleton<Scale>();
 builder.Services.AddSingleton<SerialHandler>();
 builder.Services.AddHostedService<Worker>();

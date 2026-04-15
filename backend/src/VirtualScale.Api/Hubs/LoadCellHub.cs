@@ -9,7 +9,10 @@ public class LoadCellHub(Scale scale) : Hub
 {
     public IEnumerable<LoadCellResponse> GetCurrent()
     {
-        return scale.LoadCells.Select(cell => new LoadCellResponse(cell.Id, cell.RawValue, cell.Factor, cell.Status));
+        return scale.LoadCells
+            .OrderBy(cell => cell.Id)
+            .Take(scale.NumberOfCells)
+            .Select(cell => new LoadCellResponse(cell.Id, cell.RawValue, cell.Factor, cell.Status));
     }
 
     public async IAsyncEnumerable<LoadCellResponse> Stream(
@@ -19,7 +22,7 @@ public class LoadCellHub(Scale scale) : Hub
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var cells = scale.LoadCells;
+            var cells = scale.LoadCells.OrderBy(cell => cell.Id).Take(scale.NumberOfCells);
 
             foreach (var cell in cells)
             {

@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, computed, input } from "@angular/core";
 import { DecimalPipe } from "@angular/common";
 import { LoadCellResponse } from "../../models/loadcell-response";
 
@@ -10,4 +10,10 @@ import { LoadCellResponse } from "../../models/loadcell-response";
 })
 export class LoadCellGrid {
   cells = input<LoadCellResponse[]>([]);
+  maxCells = input<number>(1);
+
+  protected readonly visibleCells = computed(() => {
+    const max = Math.max(0, this.maxCells());
+    return [...this.cells()].sort((a, b) => a.id - b.id).slice(0, max);
+  });
 }

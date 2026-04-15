@@ -5,4 +5,5 @@ export interface ScaleResponse {
   isTared: boolean;
   isStable: boolean;
   filterLevel: number;
+  numberOfCells: number;
 }

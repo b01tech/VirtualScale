@@ -1,34 +1,33 @@
 <div class="cells">
-  <div class="cells-title">Células</div>
+  <div class="cells-title">Células ({{ maxCells() }})</div>
 
-  @if (cells().length === 0) {
-    <div class="cells-empty">Sem leitura</div>
+  @if (visibleCells().length === 0) {
+  <div class="cells-empty">Sem leitura</div>
   } @else {
-    <div class="cells-grid">
-      @for (cell of cells(); track cell.id) {
-        <div class="cell">
-          <div class="cell-header">
-            <span class="cell-id">#{{ cell.id }}</span>
-            <span class="cell-status" [class.error]="cell.status !== 0">
-              {{ cell.status === 0 ? "Ok" : "Erro" }}
-            </span>
-          </div>
+  <div class="cells-grid">
+    @for (cell of visibleCells(); track cell.id) {
+    <div class="cell">
+      <div class="cell-header">
+        <span class="cell-id">#{{ cell.id }}</span>
+        <span class="cell-status" [class.error]="cell.status !== 0">
+          {{ cell.status === 0 ? "Ok" : "Erro" }}
+        </span>
+      </div>
 
-          <div class="cell-line">
-            <span>Raw</span>
-            <span>{{ cell.rawValue | number: "1.0-3" }}</span>
-          </div>
-          <div class="cell-line">
-            <span>Factor</span>
-            <span>{{ cell.factor | number: "1.0-3" }}</span>
-          </div>
-          <div class="cell-line">
-            <span>Value</span>
-            <span>{{ cell.rawValue * cell.factor | number: "1.0-3" }}</span>
-          </div>
-        </div>
-      }
+      <div class="cell-line">
+        <span>Raw</span>
+        <span>{{ cell.rawValue | number: "1.2-2" }}</span>
+      </div>
+      <div class="cell-line">
+        <span>Factor</span>
+        <span>{{ cell.factor | number: "1.4-4" }}</span>
+      </div>
+      <div class="cell-line">
+        <span>Value</span>
+        <span>{{ cell.rawValue * cell.factor | number: "1.2-2" }}</span>
+      </div>
     </div>
+    }
+  </div>
   }
 </div>
-

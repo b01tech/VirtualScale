@@ -20,10 +20,15 @@
     </div>
     <div class="tara-status">
       ESTÁVEL:
-      <app-stable-indicator [isStable]="scale().isStable"></app-stable-indicator>
+      <app-stable-indicator
+        [isStable]="scale().isStable"
+      ></app-stable-indicator>
     </div>
   </div>
 
-  <app-loadcell-grid [cells]="loadCells()"></app-loadcell-grid>
+  <app-loadcell-grid
+    [cells]="loadCells()"
+    [maxCells]="scale().numberOfCells"
+  ></app-loadcell-grid>
   }
 </div>

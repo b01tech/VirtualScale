@@ -27,6 +27,7 @@ export class ScaleService {
     isTared: false,
     isStable: false,
     filterLevel: 0,
+    numberOfCells: 1,
   });
 
   readonly loadCells = signal<LoadCellResponse[]>([]);

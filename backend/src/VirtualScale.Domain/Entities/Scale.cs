@@ -3,9 +3,9 @@ namespace VirtualScale.Domain.Entities;
 public class Scale(CalibrationData calibration)
 {
     public List<LoadCell> LoadCells { get; init; } = new();
-    public int NumberOfCells { get; private set; } = 1;
+    public int NumberOfCells { get; private set; } = 2;
     public decimal RawValue { get; private set; }
-    public int FilterLevel { get; private set; } = 0;
+    public int FilterLevel { get; private set; } = 1;
     public decimal FactorCal { get; private set; } = 1000.0m;
     public decimal ZeroConstant { get; private set; } = 0.0m;
     public decimal SpanConstant { get; private set; } = 0.0m;
@@ -38,7 +38,14 @@ public class Scale(CalibrationData calibration)
 
     private void SetRawValue()
     {
-        var raw = LoadCells.Count == 0 ? 0.0m : LoadCells.Average(cell => cell.GetValue());
+        if (LoadCells.Count == 0)
+        {
+            RawValue = ApplyFilter(0.0m);
+            return;
+        }
+
+        var selected = LoadCells.OrderBy(cell => cell.Id).Take(NumberOfCells).ToList();
+        var raw = selected.Count == 0 ? 0.0m : selected.Average(cell => cell.GetValue());
         RawValue = ApplyFilter(raw);
     }
 
@@ -59,7 +66,9 @@ public class Scale(CalibrationData calibration)
         }
 
         var alpha = GetFilterAlpha(FilterLevel);
-        FilteredRawValue = FilteredRawValue is null ? raw : FilteredRawValue.Value + alpha * (raw - FilteredRawValue.Value);
+        FilteredRawValue = FilteredRawValue is null
+            ? raw
+            : FilteredRawValue.Value + alpha * (raw - FilteredRawValue.Value);
         return FilteredRawValue.Value;
     }
 
@@ -72,7 +81,7 @@ public class Scale(CalibrationData calibration)
             3 => 0.20m,
             4 => 0.10m,
             5 => 0.05m,
-            _ => 1.0m / (level * 5.0m + 1.0m)
+            _ => 1.0m / (level * 5.0m + 1.0m),
         };
     }
 
@@ -172,7 +181,10 @@ public class Scale(CalibrationData calibration)
         return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {bruteWeight}\n NetWeight: {netWeight}\n TareWeight: {tareWeight}\n ";
     }
 
-    public void SetNumberOfCells(int numberOfCells) => NumberOfCells = numberOfCells;
+    public void SetNumberOfCells(int numberOfCells)
+    {
+        NumberOfCells = Math.Clamp(numberOfCells, 1, 32);
+    }
 
     private decimal RoundValue(decimal value) =>
         Math.Round(value / (decimal)calibration.Resolution) * (decimal)calibration.Resolution;
