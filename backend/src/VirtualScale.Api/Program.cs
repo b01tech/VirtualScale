@@ -10,6 +10,7 @@ builder.Services.AddSingleton(new CalibrationData(10, 2, 3, 10));
 builder.Services.AddSingleton<Scale>();
 builder.Services.AddSingleton<SerialHandler>();
 builder.Services.AddHostedService<Worker>();
+builder.Services.AddHostedService<SerialConnectionWorker>();
 builder.Services.AddSignalR();
 builder.Services.AddCorsPolicy();
 
@@ -21,5 +22,6 @@ app.MapApiEndpoints();
 app.UseCorsPolicy();
 app.MapHub<ScaleHub>("/hubs/scale");
 app.MapHub<LoadCellHub>("/hubs/loadcells");
+app.MapHub<SerialHub>("/hubs/serial");
 
 app.Run();

@@ -4,6 +4,7 @@ import { ScaleService } from "../../services/scale.service";
 import { DecimalPipe } from "@angular/common";
 import { TareIndicator } from "../tare-indicator/tare-indicator";
 import { LoadCellGrid } from "../loadcell-grid/loadcell-grid";
+import { SerialService } from "../../services/serial.service";
 
 @Component({
   selector: "app-display-scale",
@@ -13,9 +14,11 @@ import { LoadCellGrid } from "../loadcell-grid/loadcell-grid";
 })
 export class DisplayScale implements OnInit, OnDestroy {
   private readonly _scaleService = inject(ScaleService);
+  private readonly _serialService = inject(SerialService);
 
   protected readonly scale = this._scaleService.latest;
   protected readonly loadCells = this._scaleService.loadCells;
+  protected readonly serialStatus = this._serialService.status;
 
   async ngOnInit() {
     await this._scaleService.startLive();

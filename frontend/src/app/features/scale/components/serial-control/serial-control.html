@@ -1,0 +1,55 @@
+<section class="serial">
+  <div class="header">
+    <div class="title">Serial</div>
+    <div class="status">
+      <span
+        class="dot"
+        [class.connected]="status().state === 2"
+        [class.error]="status().state === 3"
+      ></span>
+      <span>{{ stateLabel(status().state) }}</span>
+      @if (status().connectedPort) {
+      <span class="muted">({{ status().connectedPort }})</span>
+      }
+    </div>
+  </div>
+
+  <div class="controls">
+    <label class="label" for="serialPort">Porta COM</label>
+    <select
+      id="serialPort"
+      class="select"
+      [value]="selectedPort()"
+      (change)="onPortChange($event)"
+    >
+      @for (port of ports(); track port) {
+      <option [value]="port">{{ port }}</option>
+      }
+    </select>
+
+    <app-button
+      [label]="'Atualizar'"
+      [variant]="'secondary'"
+      [disabled]="isBusy()"
+      (clicked)="onRefreshPorts()"
+    ></app-button>
+
+    @if (status().desiredConnected) {
+    <app-button
+      [label]="'Desconectar'"
+      [disabled]="isBusy()"
+      (clicked)="onDisconnect()"
+    ></app-button>
+    } @else {
+    <app-button
+      [label]="'Conectar'"
+      [disabled]="isBusy() || !selectedPort()"
+      (clicked)="onConnect()"
+    ></app-button>
+    }
+  </div>
+
+  @if (status().lastError) {
+  <div class="error">{{ status().lastError }}</div>
+  }
+</section>

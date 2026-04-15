@@ -1,17 +1,25 @@
 <div class="display">
   <div class="value">
+    @if (serialStatus().state === 2) {
     <span class="weight">{{ scale().netWeight | number: "1.3-3" }}</span>
     <span class="unit">kg</span>
+    } @else {
+    <span class="weight">------</span>
+    <span class="unit">desconectado</span>
+    }
   </div>
 
+  @if (serialStatus().state === 2) {
   <div class="details">
     <div>Peso Bruto: {{ scale().bruteWeight | number: "1.3-3" }} kg</div>
     <div>Peso líquido: {{ scale().netWeight | number: "1.3-3" }} kg</div>
     <div>Peso Tara: {{ scale().tareWeight | number: "1.3-3" }} kg</div>
     <div class="tara-status">
-      TARA: <app-tare-indicator [isTared]="scale().isTared" />
+      TARA:
+      <app-tare-indicator [isTared]="scale().isTared"></app-tare-indicator>
     </div>
   </div>
 
   <app-loadcell-grid [cells]="loadCells()"></app-loadcell-grid>
+  }
 </div>
