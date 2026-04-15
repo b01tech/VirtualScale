@@ -48,6 +48,10 @@ export class EqualizeLoadCells {
   protected readonly totalCells = computed(() => this.orderedIds().length);
   protected readonly totalSteps = computed(() => this.totalCells() + 1);
 
+  protected readonly canEqualize = computed(
+    () => (this.scale().numberOfCells ?? 0) > 1,
+  );
+
   protected readonly currentId = computed(() =>
     this.stepIndex() <= 0
       ? null
@@ -79,7 +83,7 @@ export class EqualizeLoadCells {
       return;
     }
 
-    if (this.totalCells() < 2) {
+    if (!this.canEqualize() || this.totalCells() < 2) {
       this.error.set("Necessário pelo menos 2 células para equalizar");
       return;
     }

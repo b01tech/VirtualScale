@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, computed, effect, inject, signal } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 import { AppButton } from "../../../../shared/button/app-button";
@@ -19,13 +19,43 @@ export class CalibrationSettings {
   protected readonly isBusy = signal(false);
 
   protected readonly form = this._fb.group({
-    numberOfCells: [2, [Validators.required, Validators.min(1), Validators.max(32)]],
+    numberOfCells: [
+      2,
+      [Validators.required, Validators.min(1), Validators.max(4)],
+    ],
     unit: ["kg", [Validators.required]],
     capMax: [10, [Validators.required, Validators.min(0.000001)]],
-    division: [2, [Validators.required, Validators.min(1)]],
-    decimalPlaces: [3, [Validators.required, Validators.min(0), Validators.max(6)]],
+    division: [2, [Validators.required]],
+    decimalPlaces: [3, [Validators.required]],
     referenceWeight: [10, [Validators.required, Validators.min(0.000001)]],
   });
+
+  protected readonly allowedCells = [1, 2, 3, 4] as const;
+  protected readonly allowedDivisions = [1, 2, 5, 10, 20] as const;
+  protected readonly allowedDecimalPlaces = [0, 1, 2, 3, 4] as const;
+
+  protected readonly maxReferenceWeight = computed(
+    () => this.form.controls.capMax.value ?? 0,
+  );
+
+  constructor() {
+    effect(() => {
+      const division = this.form.controls.division.value ?? 1;
+      if (division === 10 || division === 20) {
+        this.form.controls.decimalPlaces.setValue(0, { emitEvent: false });
+      }
+    });
+
+    effect(() => {
+      const capMax = this.form.controls.capMax.value ?? 0;
+      const currentRef = this.form.controls.referenceWeight.value ?? 0;
+      if (currentRef > capMax) {
+        this.form.controls.referenceWeight.setValue(capMax, {
+          emitEvent: false,
+        });
+      }
+    });
+  }
 
   protected toggle() {
     if (this.isOpen()) {

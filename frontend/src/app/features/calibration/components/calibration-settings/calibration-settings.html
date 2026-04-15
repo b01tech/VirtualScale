@@ -10,7 +10,11 @@
   <form class="form" [formGroup]="form" (ngSubmit)="save()">
     <label>
       Número de células
-      <input type="number" formControlName="numberOfCells" />
+      <select formControlName="numberOfCells">
+        @for (n of allowedCells; track n) {
+        <option [value]="n">{{ n }}</option>
+        }
+      </select>
     </label>
 
     <label>
@@ -28,17 +32,33 @@
 
     <label>
       Divisão
-      <input type="number" formControlName="division" />
+      <select formControlName="division">
+        @for (d of allowedDivisions; track d) {
+        <option [value]="d">{{ d }}</option>
+        }
+      </select>
     </label>
 
     <label>
       Casas decimais
-      <input type="number" formControlName="decimalPlaces" />
+      <select
+        formControlName="decimalPlaces"
+        [disabled]="form.controls.division.value === 10 || form.controls.division.value === 20"
+      >
+        @for (p of allowedDecimalPlaces; track p) {
+        <option [value]="p">{{ p }}</option>
+        }
+      </select>
     </label>
 
     <label>
       Peso de Referência
-      <input type="number" step="0.001" formControlName="referenceWeight" />
+      <input
+        type="number"
+        step="0.001"
+        formControlName="referenceWeight"
+        [max]="maxReferenceWeight()"
+      />
     </label>
 
     <div class="actions">

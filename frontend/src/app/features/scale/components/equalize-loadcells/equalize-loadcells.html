@@ -3,7 +3,7 @@
     <app-button
       [label]="'Equalizar'"
       [variant]="'secondary'"
-      [disabled]="!isConnected() || totalSteps() < 2 || isOpen() || isResetOpen()"
+      [disabled]="!isConnected() || !canEqualize() || isOpen() || isResetOpen()"
       (clicked)="start()"
     ></app-button>
     <app-button

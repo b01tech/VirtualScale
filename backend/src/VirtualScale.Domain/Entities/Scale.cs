@@ -43,7 +43,7 @@ public class Scale(CalibrationData calibration)
         return true;
     }
 
-    public bool CheckZero() => NetWeight == 0.0m;
+    public bool CheckZero() => RoundValue(NetWeight) == 0.0m;
 
     public bool TryZero()
     {
