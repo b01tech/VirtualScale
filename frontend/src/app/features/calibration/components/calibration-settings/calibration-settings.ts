@@ -1,6 +1,8 @@
 import { Component, computed, effect, inject, signal } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map, startWith } from "rxjs";
 import { AppButton } from "../../../../shared/button/app-button";
 import { ScaleService } from "../../../scale/services/scale.service";
 
@@ -34,15 +36,24 @@ export class CalibrationSettings {
   protected readonly allowedDivisions = [1, 2, 5, 10, 20] as const;
   protected readonly allowedDecimalPlaces = [0, 1, 2, 3, 4] as const;
 
-  protected readonly divisionValue = computed(() =>
-    Number(this.form.controls.division.value ?? 1),
+  protected readonly divisionValue = toSignal(
+    this.form.controls.division.valueChanges.pipe(
+      startWith(this.form.controls.division.value),
+      map((value) => Number(value ?? 1)),
+    ),
+    { initialValue: Number(this.form.controls.division.value ?? 1) },
   );
   protected readonly decimalLocked = computed(
     () => this.divisionValue() === 10 || this.divisionValue() === 20,
   );
-  protected readonly maxReferenceWeight = computed(() =>
-    Number(this.form.controls.capMax.value ?? 0),
+  protected readonly capMaxValue = toSignal(
+    this.form.controls.capMax.valueChanges.pipe(
+      startWith(this.form.controls.capMax.value),
+      map((value) => Number(value ?? 0)),
+    ),
+    { initialValue: Number(this.form.controls.capMax.value ?? 0) },
   );
+  protected readonly maxReferenceWeight = computed(() => this.capMaxValue());
 
   constructor() {
     effect(() => {
