@@ -41,10 +41,7 @@
 
     <label>
       Casas decimais
-      <select
-        formControlName="decimalPlaces"
-        [disabled]="form.controls.division.value === 10 || form.controls.division.value === 20"
-      >
+      <select formControlName="decimalPlaces" [disabled]="decimalLocked()">
         @for (p of allowedDecimalPlaces; track p) {
         <option [value]="p">{{ p }}</option>
         }

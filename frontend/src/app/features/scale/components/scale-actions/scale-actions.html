@@ -8,7 +8,7 @@
   <app-button
     [label]="'ZERO'"
     [variant]="'warning'"
-    [disabled]="isBusy()"
+    [disabled]="isBusy() || !canZero()"
     (clicked)="zero()"
   ></app-button>
   <app-button

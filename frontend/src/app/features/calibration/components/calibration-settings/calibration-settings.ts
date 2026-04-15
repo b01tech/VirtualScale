@@ -34,26 +34,32 @@ export class CalibrationSettings {
   protected readonly allowedDivisions = [1, 2, 5, 10, 20] as const;
   protected readonly allowedDecimalPlaces = [0, 1, 2, 3, 4] as const;
 
-  protected readonly maxReferenceWeight = computed(
-    () => this.form.controls.capMax.value ?? 0,
+  protected readonly divisionValue = computed(() =>
+    Number(this.form.controls.division.value ?? 1),
+  );
+  protected readonly decimalLocked = computed(
+    () => this.divisionValue() === 10 || this.divisionValue() === 20,
+  );
+  protected readonly maxReferenceWeight = computed(() =>
+    Number(this.form.controls.capMax.value ?? 0),
   );
 
   constructor() {
     effect(() => {
-      const division = this.form.controls.division.value ?? 1;
-      if (division === 10 || division === 20) {
+      if (this.decimalLocked()) {
         this.form.controls.decimalPlaces.setValue(0, { emitEvent: false });
       }
     });
 
     effect(() => {
-      const capMax = this.form.controls.capMax.value ?? 0;
-      const currentRef = this.form.controls.referenceWeight.value ?? 0;
-      if (currentRef > capMax) {
-        this.form.controls.referenceWeight.setValue(capMax, {
-          emitEvent: false,
-        });
-      }
+      const capMax = this.maxReferenceWeight();
+      const referenceControl = this.form.controls.referenceWeight;
+      referenceControl.setValidators([
+        Validators.required,
+        Validators.min(0.000001),
+        Validators.max(capMax),
+      ]);
+      referenceControl.updateValueAndValidity({ emitEvent: false });
     });
   }
 

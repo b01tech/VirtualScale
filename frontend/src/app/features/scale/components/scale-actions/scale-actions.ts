@@ -20,6 +20,14 @@ export class ScaleActions {
   protected readonly canTare = computed(
     () => this.scale().isTared || this.scale().bruteWeight > 0,
   );
+  protected readonly unitFactor = computed(() =>
+    this.scale().unit === "g" ? 1000 : 1,
+  );
+  protected readonly canZero = computed(() => {
+    const net = (this.scale().netWeight ?? 0) * this.unitFactor();
+    const tolerance = 10 * (this.scale().resolution ?? 0);
+    return Math.abs(net) <= tolerance;
+  });
 
   protected async tare() {
     if (this.isBusy()) {
