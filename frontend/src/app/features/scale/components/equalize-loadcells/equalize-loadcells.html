@@ -58,23 +58,23 @@
     } @else {
     <div class="title">Equalizar células</div>
     <div class="subtitle">
-      Use o mesmo peso em todas as plataformas e confirme uma por vez.
+      Use o mesmo peso em todas as células de carga e confirme uma por vez.
     </div>
 
     <div class="step">
       <div class="step-title">
         @if (stepIndex() === 0) { Sem peso — 1 / {{ totalSteps() }} } @else if
-        (stepIndex() === 1) { Referência (plataforma 1) — 2 / {{ totalSteps() }}
-        (Célula #{{ currentId() }}) } @else { Plataforma {{ stepIndex() }} / {{
+        (stepIndex() === 1) { Referência (célula 1) — 2 / {{ totalSteps() }}
+        (Célula #{{ currentId() }}) } @else { Célula {{ stepIndex() }} / {{
         totalCells() }} — {{ stepIndex() + 1 }} / {{ totalSteps() }} (Célula #{{
         currentId() }}) }
       </div>
       <div class="step-text">
         @if (stepIndex() === 0) { Remova todo peso de todas as plataformas e
         pressione Confirmar para registrar o ZERO. } @else if (stepIndex() ===
-        1) { Coloque o peso na plataforma 1 e pressione Confirmar para definir a
-        referência. } @else { Coloque o mesmo peso na plataforma {{ stepIndex()
-        }} e pressione Confirmar para ajustar o fator. }
+        1) { Coloque o peso na célula 1 e pressione Confirmar para definir a
+        referência. } @else { Coloque o mesmo peso na célula {{ stepIndex() }} e
+        pressione Confirmar para ajustar o fator. }
       </div>
 
       @if (currentCell()) {
