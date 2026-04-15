@@ -32,6 +32,8 @@ export class ScaleService {
     division: 1,
     decimalPlaces: 0,
     referenceWeight: 1,
+    resolution: 0,
+    unit: "kg",
     needsCalibrationAdjustment: false,
   });
 
@@ -131,6 +133,7 @@ export class ScaleService {
 
   setCalibrationSettings(payload: {
     numberOfCells: number;
+    unit: string;
     capMax: number;
     division: number;
     decimalPlaces: number;

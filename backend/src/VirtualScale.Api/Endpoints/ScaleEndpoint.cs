@@ -16,6 +16,7 @@ public static class ScaleEndpoint
                 ([FromServices] Scale scale) =>
                 {
                     var (bruteWeight, netWeight, tareWeight) = scale.GetRoundedWeights();
+                    var unitFactor = scale.Calibration.Unit == "g" ? 1000.0m : 1.0m;
                     return new ScaleResponse(
                         bruteWeight,
                         netWeight,
@@ -24,10 +25,12 @@ public static class ScaleEndpoint
                         scale.IsStable,
                         scale.FilterLevel,
                         scale.NumberOfCells,
-                        scale.Calibration.CapMax,
+                        scale.Calibration.CapMax * unitFactor,
                         scale.Calibration.Division,
                         scale.Calibration.DecimalPlaces,
-                        scale.Calibration.ReferenceWeight,
+                        scale.Calibration.ReferenceWeight * unitFactor,
+                        (decimal)scale.Calibration.Resolution * unitFactor,
+                        scale.Calibration.Unit,
                         scale.NeedsCalibrationAdjustment
                     );
                 }
@@ -43,6 +46,7 @@ public static class ScaleEndpoint
                 {
                     scale.UpdateCalibrationSettings(
                         request.NumberOfCells,
+                        request.Unit,
                         request.CapMax,
                         request.Division,
                         request.DecimalPlaces,

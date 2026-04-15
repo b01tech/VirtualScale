@@ -192,6 +192,7 @@ public class Scale(CalibrationData calibration)
 
     public void UpdateCalibrationSettings(
         int numberOfCells,
+        string? unit,
         decimal capMax,
         int division,
         int decimalPlaces,
@@ -199,7 +200,7 @@ public class Scale(CalibrationData calibration)
     )
     {
         SetNumberOfCells(numberOfCells);
-        calibration.Update(capMax, division, decimalPlaces, referenceWeight);
+        calibration.Update(unit, capMax, division, decimalPlaces, referenceWeight);
         NeedsCalibrationAdjustment = true;
     }
 

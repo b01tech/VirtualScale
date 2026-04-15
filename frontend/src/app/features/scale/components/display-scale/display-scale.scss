@@ -48,3 +48,10 @@
   );
   border: 1px solid color-mix(in srgb, var(--feedback-warning) 45%, transparent);
 }
+
+.details-group {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

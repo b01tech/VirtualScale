@@ -10,5 +10,7 @@ export interface ScaleResponse {
   division: number;
   decimalPlaces: number;
   referenceWeight: number;
+  resolution: number;
+  unit: string;
   needsCalibrationAdjustment: boolean;
 }

@@ -12,5 +12,7 @@ public record ScaleResponse(
     int Division,
     int DecimalPlaces,
     decimal ReferenceWeight,
+    decimal Resolution,
+    string Unit,
     bool NeedsCalibrationAdjustment
 );

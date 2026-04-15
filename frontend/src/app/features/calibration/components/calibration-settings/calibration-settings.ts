@@ -20,6 +20,7 @@ export class CalibrationSettings {
 
   protected readonly form = this._fb.group({
     numberOfCells: [2, [Validators.required, Validators.min(1), Validators.max(32)]],
+    unit: ["kg", [Validators.required]],
     capMax: [10, [Validators.required, Validators.min(0.000001)]],
     division: [2, [Validators.required, Validators.min(1)]],
     decimalPlaces: [3, [Validators.required, Validators.min(0), Validators.max(6)]],
@@ -35,6 +36,7 @@ export class CalibrationSettings {
     const current = this.scale();
     this.form.patchValue({
       numberOfCells: current.numberOfCells,
+      unit: current.unit,
       capMax: current.capMax,
       division: current.division,
       decimalPlaces: current.decimalPlaces,
@@ -55,6 +57,7 @@ export class CalibrationSettings {
       await firstValueFrom(
         this._scaleService.setCalibrationSettings({
           numberOfCells: Number(value.numberOfCells ?? 1),
+          unit: String(value.unit ?? "kg"),
           capMax: Number(value.capMax ?? 0),
           division: Number(value.division ?? 1),
           decimalPlaces: Number(value.decimalPlaces ?? 0),
@@ -67,4 +70,3 @@ export class CalibrationSettings {
     }
   }
 }
-

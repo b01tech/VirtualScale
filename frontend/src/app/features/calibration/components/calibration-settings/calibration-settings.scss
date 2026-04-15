@@ -39,10 +39,18 @@ input {
   padding: 0 10px;
 }
 
+select {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  padding: 0 10px;
+}
+
 .actions {
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
   gap: 10px;
 }
-

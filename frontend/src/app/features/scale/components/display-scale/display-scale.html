@@ -1,8 +1,10 @@
 <div class="display">
   <div class="value">
     @if (serialStatus().state === 2) {
-    <span class="weight">{{ scale().netWeight | number: "1.3-3" }}</span>
-    <span class="unit">kg</span>
+    <span class="weight"
+      >{{ scale().netWeight * unitFactor() | number: "1.3-3" }}</span
+    >
+    <span class="unit">{{ unitLabel() }}</span>
     } @else {
     <span class="weight">------</span>
     <span class="unit">desconectado</span>
@@ -18,9 +20,18 @@
 
   @if (serialStatus().state === 2) {
   <div class="details">
-    <div>Peso Bruto: {{ scale().bruteWeight | number: "1.3-3" }} kg</div>
-    <div>Peso líquido: {{ scale().netWeight | number: "1.3-3" }} kg</div>
-    <div>Peso Tara: {{ scale().tareWeight | number: "1.3-3" }} kg</div>
+    <div>
+      Peso Bruto: {{ scale().bruteWeight * unitFactor() | number: "1.3-3" }} {{
+      unitLabel() }}
+    </div>
+    <div>
+      Peso líquido: {{ scale().netWeight * unitFactor() | number: "1.3-3" }} {{
+      unitLabel() }}
+    </div>
+    <div>
+      Peso Tara: {{ scale().tareWeight * unitFactor() | number: "1.3-3" }} {{
+      unitLabel() }}
+    </div>
     <div class="tara-status">
       TARA:
       <app-tare-indicator [isTared]="scale().isTared"></app-tare-indicator>
@@ -34,6 +45,16 @@
     @if (scale().needsCalibrationAdjustment) {
     <div class="calibration-warning">
       Parâmetros alterados. Necessário novo ajuste de ZERO/SPAN.
+    </div>
+    } @if (showCells()) {
+    <div class="details-group">
+      <div>
+        Capacidade Máxima: {{ scale().capMax | number: "1.0-3" }} {{ unitLabel()
+        }}
+      </div>
+      <div>
+        Resolução: {{ scale().resolution | number: "1.0-6" }} {{ unitLabel() }}
+      </div>
     </div>
     }
   </div>
