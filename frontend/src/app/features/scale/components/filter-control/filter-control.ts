@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from "@angular/core";
+import { Component, computed, effect, inject, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { AppButton } from "../../../../shared/button/app-button";
 import { ScaleService } from "../../services/scale.service";
@@ -21,16 +21,31 @@ export class FilterControl {
   protected readonly isConnected = computed(
     () => this.serialStatus().state === 2,
   );
-  protected readonly selected = signal<number>(0);
+  protected readonly selected = signal<number>(1);
+  protected readonly current = computed(() => this.scale().filterLevel ?? 1);
+  protected readonly hasPendingChange = signal(false);
 
   constructor() {
-    this.selected.set(this.scale().filterLevel ?? 0);
+    this.selected.set(this.scale().filterLevel ?? 1);
+
+    effect(() => {
+      const current = this.current();
+      if (!this.hasPendingChange()) {
+        this.selected.set(current);
+      }
+    });
+  }
+
+  protected syncToCurrent() {
+    this.selected.set(this.current());
+    this.hasPendingChange.set(false);
   }
 
   protected onLevelChange(event: Event) {
     const target = event.target as HTMLSelectElement | null;
     const parsed = Number(target?.value ?? 0);
     this.selected.set(Number.isFinite(parsed) ? parsed : 0);
+    this.hasPendingChange.set(true);
   }
 
   protected async apply() {
@@ -41,6 +56,7 @@ export class FilterControl {
     this.isBusy.set(true);
     try {
       await firstValueFrom(this._scaleService.setFilterLevel(this.selected()));
+      this.hasPendingChange.set(false);
     } finally {
       this.isBusy.set(false);
     }

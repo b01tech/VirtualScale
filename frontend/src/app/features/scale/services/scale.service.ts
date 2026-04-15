@@ -26,7 +26,7 @@ export class ScaleService {
     tareWeight: 0,
     isTared: false,
     isStable: false,
-    filterLevel: 0,
+    filterLevel: 1,
     numberOfCells: 1,
     capMax: 0,
     division: 1,

@@ -63,18 +63,18 @@
 
     <div class="step">
       <div class="step-title">
-        @if (stepIndex() === 0) { Baseline (sem peso) — 1 / {{ totalSteps() }} }
-        @else if (stepIndex() === 1) { Referência (plataforma 1) — 2 / {{
-        totalSteps() }} (Célula #{{ currentId() }}) } @else { Plataforma {{
-        stepIndex() }} / {{ totalCells() }} — {{ stepIndex() + 1 }} / {{
-        totalSteps() }} (Célula #{{ currentId() }}) }
+        @if (stepIndex() === 0) { Sem peso — 1 / {{ totalSteps() }} } @else if
+        (stepIndex() === 1) { Referência (plataforma 1) — 2 / {{ totalSteps() }}
+        (Célula #{{ currentId() }}) } @else { Plataforma {{ stepIndex() }} / {{
+        totalCells() }} — {{ stepIndex() + 1 }} / {{ totalSteps() }} (Célula #{{
+        currentId() }}) }
       </div>
       <div class="step-text">
         @if (stepIndex() === 0) { Remova todo peso de todas as plataformas e
-        pressione Confirmar para registrar o baseline. } @else if (stepIndex()
-        === 1) { Coloque o peso na plataforma 1 e pressione Confirmar para
-        definir a referência. } @else { Coloque o mesmo peso na plataforma {{
-        stepIndex() }} e pressione Confirmar para ajustar o fator. }
+        pressione Confirmar para registrar o ZERO. } @else if (stepIndex() ===
+        1) { Coloque o peso na plataforma 1 e pressione Confirmar para definir a
+        referência. } @else { Coloque o mesmo peso na plataforma {{ stepIndex()
+        }} e pressione Confirmar para ajustar o fator. }
       </div>
 
       @if (currentCell()) {
@@ -84,7 +84,7 @@
           <span>{{ currentCell()!.rawValue | number: "1.0-3" }}</span>
         </div>
         <div class="live-line">
-          <span>Baseline</span>
+          <span>Valor Base</span>
           <span>{{ baseline()[currentCell()!.id] | number: "1.0-3" }}</span>
         </div>
         <div class="live-line">

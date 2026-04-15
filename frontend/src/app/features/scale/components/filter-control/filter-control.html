@@ -1,6 +1,6 @@
 <section class="filter">
   <div class="header">
-    <div class="title">Filtro</div>
+    <div class="title">Filtro ({{ current() }})</div>
     <div class="subtitle">Nível de filtro digital</div>
   </div>
 
@@ -23,6 +23,13 @@
       [variant]="'secondary'"
       [disabled]="!isConnected() || isBusy()"
       (clicked)="apply()"
+    ></app-button>
+
+    <app-button
+      [label]="'Atual'"
+      [variant]="'secondary'"
+      [disabled]="!isConnected() || isBusy()"
+      (clicked)="syncToCurrent()"
     ></app-button>
   </div>
 </section>

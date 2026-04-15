@@ -43,15 +43,16 @@
 
     <div class="actions">
       <app-button
-        [label]="'Cancelar'"
-        [variant]="'secondary'"
-        [disabled]="isBusy()"
-        (clicked)="toggle()"
-      ></app-button>
-      <app-button
         [label]="'Salvar'"
+        [variant]="'secondary'"
         [disabled]="isBusy() || form.invalid"
         (clicked)="save()"
+      ></app-button>
+      <app-button
+        [label]="'Cancelar'"
+        [variant]="'danger'"
+        [disabled]="isBusy()"
+        (clicked)="toggle()"
       ></app-button>
     </div>
   </form>
