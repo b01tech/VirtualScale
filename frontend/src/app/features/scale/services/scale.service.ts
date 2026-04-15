@@ -25,6 +25,7 @@ export class ScaleService {
     netWeight: 0,
     tareWeight: 0,
     isTared: false,
+    isOnZero: true,
     isStable: false,
     filterLevel: 1,
     numberOfCells: 1,
@@ -117,6 +118,13 @@ export class ScaleService {
 
   tareScale() {
     return this._httpClient.post<void>(this._apiUrl + "/tare", {});
+  }
+
+  zeroScale() {
+    return this._httpClient.post<{ status: string; applied: boolean }>(
+      this._apiUrl + "/zero",
+      {},
+    );
   }
 
   calibrateZero() {

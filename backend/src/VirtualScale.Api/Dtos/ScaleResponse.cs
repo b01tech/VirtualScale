@@ -5,6 +5,7 @@ public record ScaleResponse(
     decimal NetWeight,
     decimal TareWeight,
     bool IsTared,
+    bool IsOnZero,
     bool IsStable,
     int FilterLevel,
     int NumberOfCells,

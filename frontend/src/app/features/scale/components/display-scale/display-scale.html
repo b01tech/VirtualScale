@@ -37,6 +37,12 @@
       <app-tare-indicator [isTared]="scale().isTared"></app-tare-indicator>
     </div>
     <div class="tara-status">
+      EM ZERO:
+      <app-tare-indicator
+        [isTared]="scale().isOnZero && scale().isStable"
+      ></app-tare-indicator>
+    </div>
+    <div class="tara-status">
       ESTÁVEL:
       <app-stable-indicator
         [isStable]="scale().isStable"

@@ -6,6 +6,12 @@
     (clicked)="tare()"
   ></app-button>
   <app-button
+    [label]="'ZERO'"
+    [variant]="'warning'"
+    [disabled]="isBusy()"
+    (clicked)="zero()"
+  ></app-button>
+  <app-button
     [label]="'Configuração'"
     [variant]="'secondary'"
     [route]="'/settings'"

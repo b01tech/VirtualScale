@@ -22,6 +22,7 @@ public static class ScaleEndpoint
                         netWeight,
                         tareWeight,
                         scale.IsTared,
+                        scale.IsOnZero,
                         scale.IsStable,
                         scale.FilterLevel,
                         scale.NumberOfCells,
@@ -70,6 +71,19 @@ public static class ScaleEndpoint
             )
             .WithName("Set Filter Level")
             .WithSummary("Set digital filter level (0 disables)")
+            .Produces(StatusCodes.Status200OK);
+
+        group
+            .MapPost(
+                "/zero",
+                ([FromServices] Scale scale) =>
+                {
+                    var applied = scale.TryZero();
+                    return Results.Ok(new { status = applied ? "applied" : "ignored", applied });
+                }
+            )
+            .WithName("Zero Scale")
+            .WithSummary("Set scale to zero when within +-10 resolutions")
             .Produces(StatusCodes.Status200OK);
 
         group

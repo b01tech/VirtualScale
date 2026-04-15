@@ -29,6 +29,18 @@ export class ScaleActions {
     }
   }
 
+  protected async zero() {
+    if (this.isBusy()) {
+      return;
+    }
+    this.isBusy.set(true);
+    try {
+      await firstValueFrom(this._scaleService.zeroScale());
+    } finally {
+      this.isBusy.set(false);
+    }
+  }
+
   protected logout() {
     this._loginService.logout();
     this._router.navigate(["/login"]);

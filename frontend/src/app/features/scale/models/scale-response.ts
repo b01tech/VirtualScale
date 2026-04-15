@@ -3,6 +3,7 @@ export interface ScaleResponse {
   netWeight: number;
   tareWeight: number;
   isTared: boolean;
+  isOnZero: boolean;
   isStable: boolean;
   filterLevel: number;
   numberOfCells: number;

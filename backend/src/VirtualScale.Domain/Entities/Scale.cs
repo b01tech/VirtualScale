@@ -38,6 +38,25 @@ public class Scale(CalibrationData calibration)
 
     public bool CheckZero() => NetWeight == 0.0m;
 
+    public bool TryZero()
+    {
+        SetRawValue();
+        BruteWeight = (RawValue - ZeroConstant) / FactorCal;
+
+        var tolerance = 10.0m * (decimal)calibration.Resolution;
+        if (Math.Abs(NetWeight) > tolerance)
+        {
+            return false;
+        }
+
+        ZeroConstant = RawValue;
+        TareWeight = 0.0m;
+        IsTared = false;
+        BruteWeight = 0.0m;
+        UpdateStability();
+        return true;
+    }
+
     private void SetRawValue()
     {
         if (LoadCells.Count == 0)

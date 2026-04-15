@@ -16,6 +16,7 @@ public class ScaleHub(Scale scale) : Hub
             netWeight,
             tareWeight,
             scale.IsTared,
+            scale.IsOnZero,
             scale.IsStable,
             scale.FilterLevel,
             scale.NumberOfCells,
