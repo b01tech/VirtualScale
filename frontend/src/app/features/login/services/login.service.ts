@@ -1,25 +1,33 @@
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class LoginService {
-  private loggedIn: boolean = false;
+  private readonly _loggedIn = signal(false);
+
+  constructor() {
+    const persisted = sessionStorage.getItem("vs_logged_in");
+    this._loggedIn.set(persisted === "true");
+  }
 
   login(username: string, password: string): boolean {
     if (username !== "admin" || password !== "admin") {
-      this.loggedIn = false;
+      this._loggedIn.set(false);
+      sessionStorage.removeItem("vs_logged_in");
       return false;
     }
-    this.loggedIn = true;
+    this._loggedIn.set(true);
+    sessionStorage.setItem("vs_logged_in", "true");
     return true;
   }
 
   logout() {
-    this.loggedIn = false;
+    this._loggedIn.set(false);
+    sessionStorage.removeItem("vs_logged_in");
   }
 
   isLoggedIn(): boolean {
-    return this.loggedIn;
+    return this._loggedIn();
   }
 }

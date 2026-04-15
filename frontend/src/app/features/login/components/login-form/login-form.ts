@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { LoginService } from "../../services/login.service";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -13,8 +13,7 @@ export class LoginForm {
   private _loginService = inject(LoginService);
   private _fb = inject(FormBuilder);
   private _router = inject(Router);
-  username: string = "";
-  password: string = "";
+  protected readonly error = signal<string | null>(null);
 
   loginForm = this._fb.group({
     username: ["", Validators.required],
@@ -22,16 +21,20 @@ export class LoginForm {
   });
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.username = this.loginForm.value.username || "";
-      this.password = this.loginForm.value.password || "";
-      const isLoggedIn = this._loginService.login(this.username, this.password);
-      if (isLoggedIn) {
-        console.log("login success");
-        this._router.navigate(["/home"]);
-      } else {
-        console.log("login failed");
-      }
+    this.error.set(null);
+    if (!this.loginForm.valid) {
+      return;
     }
+
+    const username = this.loginForm.value.username || "";
+    const password = this.loginForm.value.password || "";
+
+    const isLoggedIn = this._loginService.login(username, password);
+    if (!isLoggedIn) {
+      this.error.set("Usuário ou senha inválidos");
+      return;
+    }
+
+    this._router.navigate(["/scale"]);
   }
 }

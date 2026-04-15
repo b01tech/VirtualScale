@@ -72,3 +72,12 @@ input:focus {
   background-color: var(--action-primary-disabled);
   opacity: 0.7;
 }
+
+.error {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: color-mix(in srgb, var(--feedback-error) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--feedback-error) 45%, transparent);
+  color: var(--text-primary);
+  font-size: 13px;
+}

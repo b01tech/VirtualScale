@@ -34,4 +34,26 @@
 .btn.secondary:active:not(:disabled) {
   background-color: var(--action-secondary-active);
 }
+.btn.danger {
+  background-color: var(--feedback-error);
+}
 
+.btn.danger:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--feedback-error) 85%, #000);
+}
+
+.btn.danger:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--feedback-error) 70%, #000);
+}
+
+.btn.warning {
+  background-color: var(--feedback-warning);
+}
+
+.btn.warning:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--feedback-warning) 85%, #000);
+}
+
+.btn.warning:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--feedback-warning) 70%, #000);
+}

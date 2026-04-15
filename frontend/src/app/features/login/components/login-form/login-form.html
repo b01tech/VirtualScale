@@ -20,4 +20,8 @@
   <button class="submit" [disabled]="!loginForm.valid" type="submit">
     Entrar
   </button>
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
 </form>

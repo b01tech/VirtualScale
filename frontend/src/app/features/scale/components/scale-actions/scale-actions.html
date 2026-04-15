@@ -1,0 +1,23 @@
+<div class="actions">
+  <app-button
+    [label]="'TARA'"
+    [variant]="'warning'"
+    [disabled]="isBusy()"
+    (clicked)="tare()"
+  ></app-button>
+  <app-button
+    [label]="'Configuração'"
+    [variant]="'secondary'"
+    [route]="'/settings'"
+  ></app-button>
+  <app-button
+    [label]="'Calibração'"
+    [variant]="'secondary'"
+    [route]="'/calibration'"
+  ></app-button>
+  <app-button
+    [label]="'Logout'"
+    [variant]="'danger'"
+    (clicked)="logout()"
+  ></app-button>
+</div>

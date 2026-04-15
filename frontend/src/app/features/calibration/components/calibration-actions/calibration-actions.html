@@ -1,0 +1,18 @@
+<section class="calibration">
+  <div class="buttons">
+    <app-button
+      [label]="'Calibrar ZERO'"
+      [variant]="'secondary'"
+      [disabled]="isBusy()"
+      (clicked)="calibrateZero()"
+    ></app-button>
+    <app-button
+      [label]="'Calibrar SPAN'"
+      [variant]="'secondary'"
+      [disabled]="isBusy()"
+      (clicked)="calibrateSpan()"
+    ></app-button>
+  </div>
+
+  <app-equalize-loadcells></app-equalize-loadcells>
+</section>

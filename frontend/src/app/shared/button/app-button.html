@@ -2,7 +2,10 @@
   class="btn"
   type="button"
   [class.secondary]="variant() === 'secondary'"
+  [class.warning]="variant() === 'warning'"
+  [class.danger]="variant() === 'danger'"
   [disabled]="disabled()"
+  [routerLink]="route()"
   (click)="clicked.emit()"
 >
   {{ label() }}

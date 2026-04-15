@@ -9,6 +9,13 @@
     }
   </div>
 
+  <div class="tara-status">
+    CONEXÃO:
+    <app-connection-indicator
+      [isConnected]="serialStatus().state === 2"
+    ></app-connection-indicator>
+  </div>
+
   @if (serialStatus().state === 2) {
   <div class="details">
     <div>Peso Bruto: {{ scale().bruteWeight | number: "1.3-3" }} kg</div>
@@ -26,9 +33,10 @@
     </div>
   </div>
 
+  @if (showCells()) {
   <app-loadcell-grid
     [cells]="loadCells()"
     [maxCells]="scale().numberOfCells"
   ></app-loadcell-grid>
-  }
+  } }
 </div>
