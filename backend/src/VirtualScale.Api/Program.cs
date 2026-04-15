@@ -20,5 +20,6 @@ InitializationService.Initialize(app.Services.GetRequiredService<Scale>());
 app.MapApiEndpoints();
 app.UseCorsPolicy();
 app.MapHub<ScaleHub>("/hubs/scale");
+app.MapHub<LoadCellHub>("/hubs/loadcells");
 
 app.Run();

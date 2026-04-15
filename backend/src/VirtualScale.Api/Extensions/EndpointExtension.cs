@@ -8,5 +8,6 @@ public static class EndpointExtension
     {
         app.MapHealthEndpoint();
         app.MapScaleEndpoint();
+        app.MapLoadCellEndpoint();
     }
 }
