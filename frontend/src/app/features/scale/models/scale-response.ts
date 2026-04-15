@@ -6,4 +6,9 @@ export interface ScaleResponse {
   isStable: boolean;
   filterLevel: number;
   numberOfCells: number;
+  capMax: number;
+  division: number;
+  decimalPlaces: number;
+  referenceWeight: number;
+  needsCalibrationAdjustment: boolean;
 }

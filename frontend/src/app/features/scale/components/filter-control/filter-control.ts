@@ -18,7 +18,9 @@ export class FilterControl {
   protected readonly serialStatus = this._serialService.status;
   protected readonly isBusy = signal(false);
 
-  protected readonly isConnected = computed(() => this.serialStatus().state === 2);
+  protected readonly isConnected = computed(
+    () => this.serialStatus().state === 2,
+  );
   protected readonly selected = signal<number>(0);
 
   constructor() {
@@ -44,4 +46,3 @@ export class FilterControl {
     }
   }
 }
-

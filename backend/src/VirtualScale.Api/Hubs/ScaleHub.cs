@@ -17,7 +17,12 @@ public class ScaleHub(Scale scale) : Hub
             scale.IsTared,
             scale.IsStable,
             scale.FilterLevel,
-            scale.NumberOfCells
+            scale.NumberOfCells,
+            scale.Calibration.CapMax,
+            scale.Calibration.Division,
+            scale.Calibration.DecimalPlaces,
+            scale.Calibration.ReferenceWeight,
+            scale.NeedsCalibrationAdjustment
         );
     }
 

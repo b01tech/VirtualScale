@@ -3,13 +3,13 @@
     <app-button
       [label]="'Equalizar'"
       [variant]="'secondary'"
-      [disabled]="!isConnected() || totalSteps() < 2"
+      [disabled]="!isConnected() || totalSteps() < 2 || isOpen() || isResetOpen()"
       (clicked)="start()"
     ></app-button>
     <app-button
       [label]="'Reset fatores'"
       [variant]="'danger'"
-      [disabled]="!isConnected() || !hasCells()"
+      [disabled]="!isConnected() || !hasCells() || isOpen() || isBusy()"
       (clicked)="openReset()"
     ></app-button>
   </div>
@@ -32,7 +32,7 @@
       ></app-button>
       <app-button
         [label]="'Confirmar'"
-        [disabled]="isBusy()"
+        [disabled]="isBusy() || isOpen()"
         (clicked)="confirmReset()"
       ></app-button>
     </div>

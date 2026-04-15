@@ -7,5 +7,10 @@ public record ScaleResponse(
     bool IsTared,
     bool IsStable,
     int FilterLevel,
-    int NumberOfCells
+    int NumberOfCells,
+    decimal CapMax,
+    int Division,
+    int DecimalPlaces,
+    decimal ReferenceWeight,
+    bool NeedsCalibrationAdjustment
 );

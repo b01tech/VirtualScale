@@ -1,0 +1,48 @@
+.settings {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form {
+  border: 1px solid var(--surface-border);
+  background-color: var(--surface-foreground);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+input {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  padding: 0 10px;
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+

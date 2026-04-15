@@ -23,13 +23,37 @@ public static class ScaleEndpoint
                         scale.IsTared,
                         scale.IsStable,
                         scale.FilterLevel,
-                        scale.NumberOfCells
+                        scale.NumberOfCells,
+                        scale.Calibration.CapMax,
+                        scale.Calibration.Division,
+                        scale.Calibration.DecimalPlaces,
+                        scale.Calibration.ReferenceWeight,
+                        scale.NeedsCalibrationAdjustment
                     );
                 }
             )
             .WithName("Read Scale")
             .WithSummary("Read the current scale values")
             .Produces<ScaleResponse>(StatusCodes.Status200OK);
+
+        group
+            .MapPost(
+                "/settings",
+                ([FromServices] Scale scale, [FromBody] CalibrationSettingsRequest request) =>
+                {
+                    scale.UpdateCalibrationSettings(
+                        request.NumberOfCells,
+                        request.CapMax,
+                        request.Division,
+                        request.DecimalPlaces,
+                        request.ReferenceWeight
+                    );
+                    return Results.Ok(new { status = "success" });
+                }
+            )
+            .WithName("Set Calibration Settings")
+            .WithSummary("Set calibration settings and mark calibration as required")
+            .Produces(StatusCodes.Status200OK);
 
         group
             .MapPost(

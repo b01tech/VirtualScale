@@ -3,16 +3,18 @@
     <app-button
       [label]="'Calibrar ZERO'"
       [variant]="'secondary'"
-      [disabled]="isBusy()"
+      [disabled]="isBusy() || isEqualizing()"
       (clicked)="calibrateZero()"
     ></app-button>
     <app-button
       [label]="'Calibrar SPAN'"
       [variant]="'secondary'"
-      [disabled]="isBusy()"
+      [disabled]="isBusy() || isEqualizing()"
       (clicked)="calibrateSpan()"
     ></app-button>
   </div>
 
-  <app-equalize-loadcells></app-equalize-loadcells>
+  <app-equalize-loadcells
+    (activeChange)="setEqualizing($event)"
+  ></app-equalize-loadcells>
 </section>

@@ -1,0 +1,51 @@
+<section class="settings">
+  <app-button
+    [label]="'Modificar Dados de Calibração'"
+    [variant]="'secondary'"
+    [disabled]="isBusy()"
+    (clicked)="toggle()"
+  ></app-button>
+
+  @if (isOpen()) {
+  <form class="form" [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Número de células
+      <input type="number" formControlName="numberOfCells" />
+    </label>
+
+    <label>
+      Capacidade Máxima
+      <input type="number" step="0.001" formControlName="capMax" />
+    </label>
+
+    <label>
+      Divisão
+      <input type="number" formControlName="division" />
+    </label>
+
+    <label>
+      Casas decimais
+      <input type="number" formControlName="decimalPlaces" />
+    </label>
+
+    <label>
+      Peso de Referência
+      <input type="number" step="0.001" formControlName="referenceWeight" />
+    </label>
+
+    <div class="actions">
+      <app-button
+        [label]="'Cancelar'"
+        [variant]="'secondary'"
+        [disabled]="isBusy()"
+        (clicked)="toggle()"
+      ></app-button>
+      <app-button
+        [label]="'Salvar'"
+        [disabled]="isBusy() || form.invalid"
+        (clicked)="save()"
+      ></app-button>
+    </div>
+  </form>
+  }
+</section>

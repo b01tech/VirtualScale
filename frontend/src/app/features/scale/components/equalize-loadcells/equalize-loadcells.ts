@@ -1,5 +1,5 @@
 import { DecimalPipe } from "@angular/common";
-import { Component, computed, inject, signal } from "@angular/core";
+import { Component, computed, inject, output, signal } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { AppButton } from "../../../../shared/button/app-button";
 import { LoadCellResponse } from "../../models/loadcell-response";
@@ -15,6 +15,8 @@ import { SerialService } from "../../services/serial.service";
 export class EqualizeLoadCells {
   private readonly _scaleService = inject(ScaleService);
   private readonly _serialService = inject(SerialService);
+
+  activeChange = output<boolean>();
 
   protected readonly isOpen = signal(false);
   protected readonly isResetOpen = signal(false);
@@ -83,12 +85,14 @@ export class EqualizeLoadCells {
     }
 
     this.isOpen.set(true);
+    this.activeChange.emit(true);
   }
 
   protected close() {
     this.isOpen.set(false);
     this.isResetOpen.set(false);
     this.isBusy.set(false);
+    this.activeChange.emit(false);
   }
 
   protected openReset() {
@@ -103,6 +107,7 @@ export class EqualizeLoadCells {
     }
     this.isOpen.set(false);
     this.isResetOpen.set(true);
+    this.activeChange.emit(true);
   }
 
   protected async confirmReset() {
@@ -120,6 +125,7 @@ export class EqualizeLoadCells {
     try {
       await firstValueFrom(this._scaleService.resetLoadCellFactors());
       this.isResetOpen.set(false);
+      this.activeChange.emit(false);
     } finally {
       this.isBusy.set(false);
     }

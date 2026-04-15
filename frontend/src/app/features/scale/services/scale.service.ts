@@ -28,6 +28,11 @@ export class ScaleService {
     isStable: false,
     filterLevel: 0,
     numberOfCells: 1,
+    capMax: 0,
+    division: 1,
+    decimalPlaces: 0,
+    referenceWeight: 1,
+    needsCalibrationAdjustment: false,
   });
 
   readonly loadCells = signal<LoadCellResponse[]>([]);
@@ -122,6 +127,16 @@ export class ScaleService {
 
   setFilterLevel(level: number) {
     return this._httpClient.post<void>(this._apiUrl + "/filter", { level });
+  }
+
+  setCalibrationSettings(payload: {
+    numberOfCells: number;
+    capMax: number;
+    division: number;
+    decimalPlaces: number;
+    referenceWeight: number;
+  }) {
+    return this._httpClient.post<void>(this._apiUrl + "/settings", payload);
   }
 
   setLoadCellFactor(id: number, factor: number) {

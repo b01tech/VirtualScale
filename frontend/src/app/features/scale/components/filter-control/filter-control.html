@@ -14,7 +14,7 @@
       [disabled]="!isConnected() || isBusy()"
     >
       @for (level of [0, 1, 2, 3, 4, 5]; track level) {
-        <option [value]="level">{{ level === 0 ? "0 (off)" : level }}</option>
+      <option [value]="level">{{ level === 0 ? "0" : level }}</option>
       }
     </select>
 
@@ -26,4 +26,3 @@
     ></app-button>
   </div>
 </section>
-

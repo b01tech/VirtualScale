@@ -31,6 +31,11 @@
         [isStable]="scale().isStable"
       ></app-stable-indicator>
     </div>
+    @if (scale().needsCalibrationAdjustment) {
+    <div class="calibration-warning">
+      Parâmetros alterados. Necessário novo ajuste de ZERO/SPAN.
+    </div>
+    }
   </div>
 
   @if (showCells()) {

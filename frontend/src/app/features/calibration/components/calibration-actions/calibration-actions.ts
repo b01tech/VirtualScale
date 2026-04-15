@@ -13,9 +13,10 @@ import { EqualizeLoadCells } from "../../../scale/components/equalize-loadcells/
 export class CalibrationActions {
   private readonly _scaleService = inject(ScaleService);
   protected readonly isBusy = signal(false);
+  protected readonly isEqualizing = signal(false);
 
   protected async calibrateZero() {
-    if (this.isBusy()) {
+    if (this.isBusy() || this.isEqualizing()) {
       return;
     }
     this.isBusy.set(true);
@@ -27,7 +28,7 @@ export class CalibrationActions {
   }
 
   protected async calibrateSpan() {
-    if (this.isBusy()) {
+    if (this.isBusy() || this.isEqualizing()) {
       return;
     }
     this.isBusy.set(true);
@@ -36,5 +37,9 @@ export class CalibrationActions {
     } finally {
       this.isBusy.set(false);
     }
+  }
+
+  protected setEqualizing(active: boolean) {
+    this.isEqualizing.set(active);
   }
 }

@@ -34,3 +34,17 @@
   align-items: center;
   gap: 4px;
 }
+
+.calibration-warning {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-primary);
+  background-color: color-mix(
+    in srgb,
+    var(--feedback-warning) 25%,
+    transparent
+  );
+  border: 1px solid color-mix(in srgb, var(--feedback-warning) 45%, transparent);
+}

@@ -11,10 +11,15 @@ public class CalibrationData
 
     public CalibrationData(decimal capMax, int division, int decimalPlaces, decimal referenceWeight)
     {
-        CapMax = capMax;
-        Division = division;
-        DecimalPlaces = decimalPlaces;
-        ReferenceWeight = referenceWeight;
+        Update(capMax, division, decimalPlaces, referenceWeight);
+    }
+
+    public void Update(decimal capMax, int division, int decimalPlaces, decimal referenceWeight)
+    {
+        CapMax = Math.Max(capMax, 0.000001m);
+        Division = Math.Max(division, 1);
+        DecimalPlaces = Math.Clamp(decimalPlaces, 0, 6);
+        ReferenceWeight = Math.Max(referenceWeight, 0.000001m);
         Resolution = CalcResolution();
         CapMin = CalcCapMin();
     }

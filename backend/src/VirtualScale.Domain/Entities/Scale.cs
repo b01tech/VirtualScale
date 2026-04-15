@@ -2,6 +2,7 @@ namespace VirtualScale.Domain.Entities;
 
 public class Scale(CalibrationData calibration)
 {
+    public CalibrationData Calibration => calibration;
     public List<LoadCell> LoadCells { get; init; } = new();
     public int NumberOfCells { get; private set; } = 2;
     public decimal RawValue { get; private set; }
@@ -17,6 +18,7 @@ public class Scale(CalibrationData calibration)
     public bool IsTared { get; private set; } = false;
     public bool IsOnZero => CheckZero();
     public bool IsStable { get; private set; } = true;
+    public bool NeedsCalibrationAdjustment { get; private set; } = false;
 
     private decimal? FilteredRawValue { get; set; }
     private decimal? LastBruteWeight { get; set; }
@@ -89,6 +91,7 @@ public class Scale(CalibrationData calibration)
     {
         SetRawValue();
         ZeroConstant = RawValue;
+        EvaluateCalibrationAdjustmentStatus();
     }
 
     public void CalibrateSpan()
@@ -96,6 +99,7 @@ public class Scale(CalibrationData calibration)
         SetRawValue();
         SpanConstant = RawValue;
         FactorCal = (SpanConstant - ZeroConstant) / calibration.ReferenceWeight;
+        EvaluateCalibrationAdjustmentStatus();
     }
 
     public void CalcWeight()
@@ -184,6 +188,27 @@ public class Scale(CalibrationData calibration)
     public void SetNumberOfCells(int numberOfCells)
     {
         NumberOfCells = Math.Clamp(numberOfCells, 1, 32);
+    }
+
+    public void UpdateCalibrationSettings(
+        int numberOfCells,
+        decimal capMax,
+        int division,
+        int decimalPlaces,
+        decimal referenceWeight
+    )
+    {
+        SetNumberOfCells(numberOfCells);
+        calibration.Update(capMax, division, decimalPlaces, referenceWeight);
+        NeedsCalibrationAdjustment = true;
+    }
+
+    private void EvaluateCalibrationAdjustmentStatus()
+    {
+        if (SpanConstant > ZeroConstant)
+        {
+            NeedsCalibrationAdjustment = false;
+        }
     }
 
     private decimal RoundValue(decimal value) =>
