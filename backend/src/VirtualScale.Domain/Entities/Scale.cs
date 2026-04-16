@@ -204,11 +204,9 @@ public class Scale(CalibrationData calibration)
 
     public string PrintData()
     {
-        var bruteWeight = RoundValue(BruteWeight);
         var netWeight = RoundValue(NetWeight);
-        var tareWeight = RoundValue(TareWeight);
 
-        return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n ZeroConstant: {ZeroConstant}\n SpanConstant: {SpanConstant}\n BruteWeight: {bruteWeight}\n NetWeight: {netWeight}\n TareWeight: {tareWeight}\n ";
+        return $"RawValue: {RawValue}\n FactorCal: {FactorCal}\n Weight: {netWeight}\n ";
     }
 
     public void SetNumberOfCells(int numberOfCells)
