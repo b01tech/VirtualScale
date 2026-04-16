@@ -484,3 +484,8 @@ $RECYCLE.BIN/
 # Environment files
 environment.ts
 environment.prod.ts
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
