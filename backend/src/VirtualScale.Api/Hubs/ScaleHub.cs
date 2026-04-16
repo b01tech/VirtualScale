@@ -35,7 +35,7 @@ public class ScaleHub(Scale scale) : Hub
         while (!cancellationToken.IsCancellationRequested)
         {
             yield return GetCurrent();
-            await Task.Delay(200, cancellationToken);
+            await Task.Delay(100, cancellationToken);
         }
     }
 }

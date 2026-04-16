@@ -1,4 +1,10 @@
 <section class="calibration">
+  @if (saveStatus(); as status) {
+    <div class="status-message" [class.success]="status.success" [class.error]="!status.success">
+      {{ status.message }}
+    </div>
+  }
+
   <div class="buttons">
     <app-button
       [label]="'Calibrar ZERO'"

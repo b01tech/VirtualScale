@@ -14,30 +14,28 @@ public class CalibrationRepository : ICalibrationRepository
 
     public async Task<Persistence.Entities.CalibrationRecord?> GetByNameAsync(string name)
     {
-        return await _context.CalibrationRecords
-            .Include(c => c.LoadCellFactors)
+        return await _context
+            .CalibrationRecords.Include(c => c.LoadCellFactors)
             .FirstOrDefaultAsync(c => c.Name == name);
     }
 
     public async Task<Persistence.Entities.CalibrationRecord?> GetByIdAsync(int id)
     {
-        return await _context.CalibrationRecords
-            .Include(c => c.LoadCellFactors)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.CalibrationRecords.Include(c => c.LoadCellFactors).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<List<Persistence.Entities.CalibrationRecord>> GetAllAsync()
     {
-        return await _context.CalibrationRecords
-            .Include(c => c.LoadCellFactors)
+        return await _context
+            .CalibrationRecords.Include(c => c.LoadCellFactors)
             .OrderByDescending(c => c.UpdatedAt)
             .ToListAsync();
     }
 
     public async Task<Persistence.Entities.CalibrationRecord> SaveAsync(Persistence.Entities.CalibrationRecord record)
     {
-        var existing = await _context.CalibrationRecords
-            .Include(c => c.LoadCellFactors)
+        var existing = await _context
+            .CalibrationRecords.Include(c => c.LoadCellFactors)
             .FirstOrDefaultAsync(c => c.Name == record.Name);
 
         if (existing is null)
@@ -61,10 +59,10 @@ public class CalibrationRepository : ICalibrationRepository
             existing.FilterLevel = record.FilterLevel;
 
             _context.LoadCellFactors.RemoveRange(existing.LoadCellFactors);
-            existing.LoadCellFactors = record.LoadCellFactors;
-            foreach (var factor in existing.LoadCellFactors)
+            foreach (var factor in record.LoadCellFactors)
             {
                 factor.CalibrationRecordId = existing.Id;
+                _context.LoadCellFactors.Add(factor);
             }
 
             record = existing;

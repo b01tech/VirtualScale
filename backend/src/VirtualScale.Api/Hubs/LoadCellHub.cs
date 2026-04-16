@@ -9,8 +9,8 @@ public class LoadCellHub(Scale scale) : Hub
 {
     public IEnumerable<LoadCellResponse> GetCurrent()
     {
-        return scale.LoadCells
-            .OrderBy(cell => cell.Id)
+        return scale
+            .LoadCells.OrderBy(cell => cell.Id)
             .Take(scale.NumberOfCells)
             .Select(cell => new LoadCellResponse(cell.Id, cell.RawValue, cell.Factor, cell.Status));
     }
@@ -34,7 +34,7 @@ public class LoadCellHub(Scale scale) : Hub
                 yield return new LoadCellResponse(cell.Id, cell.RawValue, cell.Factor, cell.Status);
             }
 
-            await Task.Delay(200, cancellationToken);
+            await Task.Delay(100, cancellationToken);
         }
     }
 }

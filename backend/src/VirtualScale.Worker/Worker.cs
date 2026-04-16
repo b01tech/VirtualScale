@@ -15,7 +15,7 @@ public class Worker(ILogger<Worker> logger, Scale scale) : BackgroundService
             {
                 logger.LogInformation(scale.PrintData());
             }
-            await Task.Delay(200, stoppingToken);
+            await Task.Delay(100, stoppingToken);
         }
     }
 }

@@ -16,7 +16,7 @@ builder.Services.AddScoped<ICalibrationRepository, CalibrationRepository>();
 builder.Services.AddScoped<CalibrationPersistenceService>();
 
 builder.Services.AddSingleton(new CalibrationData(10, 2, 3, 10));
-builder.Services.AddSingleton<Scale>();
+builder.Services.AddSingleton<Scale>(sp => new Scale(sp.GetRequiredService<CalibrationData>()));
 builder.Services.AddSingleton<SerialHandler>();
 builder.Services.AddHostedService<Worker>();
 builder.Services.AddHostedService<SerialConnectionWorker>();

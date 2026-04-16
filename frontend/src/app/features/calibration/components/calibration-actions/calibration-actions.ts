@@ -14,6 +14,7 @@ export class CalibrationActions {
   private readonly _scaleService = inject(ScaleService);
   protected readonly isBusy = signal(false);
   protected readonly isEqualizing = signal(false);
+  protected readonly saveStatus = signal<{ success: boolean; message: string } | null>(null);
 
   protected async calibrateZero() {
     if (this.isBusy() || this.isEqualizing()) {
@@ -44,10 +45,15 @@ export class CalibrationActions {
       return;
     }
     this.isBusy.set(true);
+    this.saveStatus.set(null);
     try {
       await firstValueFrom(this._scaleService.saveCalibration());
+      this.saveStatus.set({ success: true, message: "Calibração salva com sucesso!" });
+    } catch {
+      this.saveStatus.set({ success: false, message: "Falha ao salvar calibração" });
     } finally {
       this.isBusy.set(false);
+      setTimeout(() => this.saveStatus.set(null), 3000);
     }
   }
 

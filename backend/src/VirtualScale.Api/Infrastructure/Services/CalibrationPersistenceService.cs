@@ -33,19 +33,7 @@ public class CalibrationPersistenceService
             record.Unit == "g" ? record.ReferenceWeight * 1000 : record.ReferenceWeight
         );
 
-        var reflectionZero = typeof(Scale).GetProperty("ZeroConstant", 
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var reflectionSpan = typeof(Scale).GetProperty("SpanConstant",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var reflectionFactor = typeof(Scale).GetProperty("FactorCal",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var reflectionFilter = typeof(Scale).GetProperty("FilterLevel",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-        reflectionZero?.SetValue(scale, record.ZeroConstant);
-        reflectionSpan?.SetValue(scale, record.SpanConstant);
-        reflectionFactor?.SetValue(scale, record.FactorCal);
-        reflectionFilter?.SetValue(scale, record.FilterLevel);
+        scale.LoadCalibrationData(record.ZeroConstant, record.SpanConstant, record.FactorCal, record.FilterLevel);
 
         foreach (var factor in record.LoadCellFactors)
         {
@@ -57,19 +45,27 @@ public class CalibrationPersistenceService
 
     public async Task SaveCalibrationAsync(Scale scale)
     {
+        if (scale.Calibration is null)
+        {
+            throw new InvalidOperationException("Scale calibration data is not initialized");
+        }
+
+        var calibration = scale.Calibration;
+        var (zeroConstant, spanConstant, factorCal, filterLevel) = scale.GetCalibrationData();
+
         var record = new Persistence.Entities.CalibrationRecord
         {
             Name = DefaultCalibrationName,
             NumberOfCells = scale.NumberOfCells,
-            Unit = scale.Calibration.Unit,
-            CapMax = scale.Calibration.CapMax,
-            Division = scale.Calibration.Division,
-            DecimalPlaces = scale.Calibration.DecimalPlaces,
-            ReferenceWeight = scale.Calibration.ReferenceWeight,
-            ZeroConstant = GetPrivateField<decimal>(scale, "ZeroConstant"),
-            SpanConstant = GetPrivateField<decimal>(scale, "SpanConstant"),
-            FactorCal = GetPrivateField<decimal>(scale, "FactorCal"),
-            FilterLevel = GetPrivateField<int>(scale, "FilterLevel"),
+            Unit = calibration.Unit,
+            CapMax = calibration.CapMax,
+            Division = calibration.Division,
+            DecimalPlaces = calibration.DecimalPlaces,
+            ReferenceWeight = calibration.ReferenceWeight,
+            ZeroConstant = zeroConstant,
+            SpanConstant = spanConstant,
+            FactorCal = factorCal,
+            FilterLevel = filterLevel,
             LoadCellFactors = scale.LoadCells
                 .Select(lc => new Persistence.Entities.LoadCellFactorRecord
                 {
@@ -80,12 +76,5 @@ public class CalibrationPersistenceService
         };
 
         await _repository.SaveAsync(record);
-    }
-
-    private static T GetPrivateField<T>(object obj, string fieldName)
-    {
-        var field = obj.GetType().GetProperty(fieldName,
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        return (T)(field?.GetValue(obj) ?? default!);
     }
 }

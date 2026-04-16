@@ -230,6 +230,20 @@ public class Scale(CalibrationData calibration)
         NeedsCalibrationAdjustment = true;
     }
 
+    public void LoadCalibrationData(decimal zeroConstant, decimal spanConstant, decimal factorCal, int filterLevel)
+    {
+        ZeroConstant = zeroConstant;
+        SpanConstant = spanConstant;
+        FactorCal = factorCal;
+        FilterLevel = filterLevel;
+        EvaluateCalibrationAdjustmentStatus();
+    }
+
+    public (decimal ZeroConstant, decimal SpanConstant, decimal FactorCal, int FilterLevel) GetCalibrationData()
+    {
+        return (ZeroConstant, SpanConstant, FactorCal, FilterLevel);
+    }
+
     private void EvaluateCalibrationAdjustmentStatus()
     {
         if (SpanConstant > ZeroConstant)
