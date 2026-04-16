@@ -39,6 +39,18 @@ export class CalibrationActions {
     }
   }
 
+  protected async saveCalibration() {
+    if (this.isBusy() || this.isEqualizing()) {
+      return;
+    }
+    this.isBusy.set(true);
+    try {
+      await firstValueFrom(this._scaleService.saveCalibration());
+    } finally {
+      this.isBusy.set(false);
+    }
+  }
+
   protected setEqualizing(active: boolean) {
     this.isEqualizing.set(active);
   }

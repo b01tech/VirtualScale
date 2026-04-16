@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VirtualScale.Api.Dtos;
+using VirtualScale.Api.Infrastructure.Services;
 using VirtualScale.Domain.Entities;
 
 namespace VirtualScale.Api.Endpoints;
@@ -121,6 +122,19 @@ public static class ScaleEndpoint
             )
             .WithName("Calibrate Span")
             .WithSummary("Take span value")
+            .Produces(StatusCodes.Status200OK);
+
+        group
+            .MapPost(
+                "/calibration/save",
+                async ([FromServices] Scale scale, [FromServices] CalibrationPersistenceService persistenceService) =>
+                {
+                    await persistenceService.SaveCalibrationAsync(scale);
+                    return Results.Ok(new { status = "saved" });
+                }
+            )
+            .WithName("Save Calibration")
+            .WithSummary("Save calibration data to database")
             .Produces(StatusCodes.Status200OK);
     }
 }

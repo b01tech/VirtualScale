@@ -135,6 +135,10 @@ export class ScaleService {
     return this._httpClient.post<void>(this._apiUrl + "/calibrate/span", {});
   }
 
+  saveCalibration() {
+    return this._httpClient.post<void>(this._apiUrl + "/calibration/save", {});
+  }
+
   setFilterLevel(level: number) {
     return this._httpClient.post<void>(this._apiUrl + "/filter", { level });
   }

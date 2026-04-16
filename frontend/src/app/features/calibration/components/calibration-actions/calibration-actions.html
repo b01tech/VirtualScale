@@ -12,6 +12,12 @@
       [disabled]="isBusy() || isEqualizing()"
       (clicked)="calibrateSpan()"
     ></app-button>
+    <app-button
+      [label]="'Salvar Calibração'"
+      [variant]="'primary'"
+      [disabled]="isBusy() || isEqualizing()"
+      (clicked)="saveCalibration()"
+    ></app-button>
   </div>
 
   <app-equalize-loadcells
