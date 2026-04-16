@@ -58,11 +58,14 @@ public class CalibrationRepository : ICalibrationRepository
             existing.FactorCal = record.FactorCal;
             existing.FilterLevel = record.FilterLevel;
 
-            _context.LoadCellFactors.RemoveRange(existing.LoadCellFactors);
+            var factorsToRemove = existing.LoadCellFactors.ToList();
+            existing.LoadCellFactors.Clear();
+            _context.LoadCellFactors.RemoveRange(factorsToRemove);
+            
             foreach (var factor in record.LoadCellFactors)
             {
                 factor.CalibrationRecordId = existing.Id;
-                _context.LoadCellFactors.Add(factor);
+                existing.LoadCellFactors.Add(factor);
             }
 
             record = existing;
